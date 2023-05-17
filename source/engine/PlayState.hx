@@ -1,4 +1,4 @@
-package;
+package engine;
 
 import flixel.FlxState;
 
