@@ -9,5 +9,8 @@ class Mem {
         OpenFlAssets.cache.clear();
         FlxG.bitmap.dumpCache();
         FlxG.bitmap.clearCache();
+        #if cpp
+        cpp.vm.Gc.run();
+        #end
     }
 }
