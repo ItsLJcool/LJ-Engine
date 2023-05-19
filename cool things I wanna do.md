@@ -15,7 +15,7 @@ This is used to get rid of bloat but also for accessability.
 In-game crash handler that directs you to the Line, .hx, and if its a Script or Engine Issue
 This will be in both engines and could also do a thing where it sends the Data to a server if you have a bot in your Discord Server
 
-ex: Script.hx has an <eof> error, and you didn't catch it before exporting to .ycemod, and when users are playing it and Script.hx is used, it will send a
+ex: Script.hx has an **eof** error, and you didn't catch it before exporting to .ycemod, and when users are playing it and Script.hx is used, it will send a
 ping (can be disabled) and if there is multiple people sending errors it wont bloat the Channel, just increment the number by editing.
 
 ## 4. Making .ycemod, well not just a Zip File
