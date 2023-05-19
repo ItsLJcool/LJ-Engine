@@ -1,11 +1,12 @@
-//a
+// a
 package assets;
-import haxe.io.Bytes;
-import openfl.media.Sound;
-import flixel.graphics.frames.FlxAtlasFrames;
-import openfl.display.BitmapData;
+
 import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
 import haxe.Json;
+import haxe.io.Bytes;
+import openfl.display.BitmapData;
+import openfl.media.Sound;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -62,7 +63,8 @@ class Assets {
 					}
 					return cache.get(path);
 				case SPARROW:
-					return FlxAtlasFrames.fromSparrow(load(IMAGE, FileSystem.absolutePath(path)), load(XML, FileSystem.absolutePath(path).replace(".png", ".xml")), false);
+					return FlxAtlasFrames.fromSparrow(load(IMAGE, FileSystem.absolutePath(path)),
+						load(XML, FileSystem.absolutePath(path).replace(".png", ".xml")), false);
 				case SOUND:
 					if (!cache.exists(FileSystem.absolutePath(path)))
 						cache.add(path, Sound.fromFile(path));
@@ -75,7 +77,8 @@ class Assets {
 					trace("no Asset Type found");
 					return null;
 			}
-		} catch (e) {
+		}
+		catch (e) {
 			trace("File Named " + '"${path}"' + " not Found");
 			return null;
 		}

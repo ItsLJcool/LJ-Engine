@@ -11,6 +11,8 @@
 
 	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
 	<set name="SWF_VERSION" value="11.8" />
+	<define name="Modding_Engnie" />
+	<define name="User_Engine" unless="Modding_Engnie"/>
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 

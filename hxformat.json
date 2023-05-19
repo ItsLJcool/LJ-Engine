@@ -1,9 +1,9 @@
 {
 	"lineEnds": {
-		"leftCurly": "both",
-		"rightCurly": "both",
+		"leftCurly": "after",
+		"rightCurly": "after",
 		"objectLiteralCurly": {
-			"leftCurly": "after"
+			"leftCurly": "before"
 		}
 	},
 	"sameLine": {
