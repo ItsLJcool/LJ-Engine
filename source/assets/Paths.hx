@@ -4,7 +4,7 @@ class Paths {
 	public static var CURRENT_MOD = "Funkin'";
 
 	public static function getPath(path:String) {
-		return FileSystem.absolutePath('mods/$CURRENT_MOD/$path');
+		return FileSystem.absolutePath('assets/$path');
 	}
 
 	public static function image(path:String) {
@@ -12,7 +12,7 @@ class Paths {
 	}
 
 	public static function getSparrowAtlas(path:String) {
-		return Assets.load(JSON, image("data/colors"));
+		return Assets.load(SPARROW, image(path));
 	}
 
 	public static function sound(path:String) {

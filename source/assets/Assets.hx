@@ -64,7 +64,7 @@ class Assets {
 					return cache.get(path);
 				case SPARROW:
 					return FlxAtlasFrames.fromSparrow(load(IMAGE, FileSystem.absolutePath(path)),
-						load(XML, FileSystem.absolutePath(path).replace(".png", ".xml")), false);
+						load(XML, FileSystem.absolutePath(path).replace(".png", ".xml")));
 				case SOUND:
 					if (!cache.exists(FileSystem.absolutePath(path)))
 						cache.add(path, Sound.fromFile(path));

@@ -1,5 +1,6 @@
 package engine;
 
+import flixel.FlxSprite;
 import flixel.FlxState;
 
 class PlayState extends FlxState {

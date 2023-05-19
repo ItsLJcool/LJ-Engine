@@ -13,5 +13,8 @@ class Mem {
 		#if cpp
 		cpp.vm.Gc.run(true);
 		#end
+		#if hl
+		hl.Gc.major();
+		#end
 	}
 }
