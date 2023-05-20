@@ -1,4 +1,4 @@
 package engine;
 
 // do title state here
-class TitleState extends Sprite {}
+class TitleState extends flixel.FlxState {}
