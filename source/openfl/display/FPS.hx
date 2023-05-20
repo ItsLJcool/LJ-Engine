@@ -1,12 +1,13 @@
 package openfl.display;
 
+import flixel.util.FlxStringUtil;
 import haxe.Timer;
 import openfl.display.FPS;
 import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import flixel.util.FlxStringUtil;
+
 class FPS extends TextField {
 	private var times:Array<Float>;
 
@@ -48,7 +49,12 @@ class FPS extends TextField {
 			memPeak = mem;
 
 		if (visible) {
-			text = "FPS: " + times.length + "\nMEM: " + FlxStringUtil.formatBytes(mem) + "\nMEM peak: " + FlxStringUtil.formatBytes(memPeak);
+			text = "FPS: "
+				+ times.length
+				+ "\nMEM: "
+				+ FlxStringUtil.formatBytes(mem)
+				+ "\nMEM peak: "
+				+ FlxStringUtil.formatBytes(memPeak);
 		}
 	}
 }
