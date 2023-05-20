@@ -1,4 +1,4 @@
-package engine.backend;
+package game;
 
 import haxe.Json;
 

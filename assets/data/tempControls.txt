@@ -1,0 +1,11 @@
+A
+S
+NUMPADFIVE
+NUMPADSIX
+LEFT
+DOWN
+UP
+RIGHT
+
+like i said, this is temporary.
+and yes, i use A S 5 6.

@@ -1,6 +1,6 @@
-package engine.backend;
+package backend;
 
-import engine.backend.Song;
+import game.Song;
 import flixel.util.FlxSignal.FlxTypedSignal;
 
 typedef BPMChangeEvent = {
