@@ -79,7 +79,7 @@ class Assets {
 			}
 		}
 		catch (e) {
-			trace("File Named " + '"${path}"' + " not Found");
+			trace('File "$path" was unable to be loaded. | $e');
 			return null;
 		}
 	}

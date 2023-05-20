@@ -1,0 +1,13 @@
+A
+S
+NUMPADFIVE
+NUMPADSIX
+LEFT
+DOWN
+UP
+RIGHT
+Tutorial
+
+like i said, this is temporary.
+The first 8 are keybinds (yes, i use A S 5 6)
+and the 9th one is the song. (No compilation needed to use it! Just add the files!)

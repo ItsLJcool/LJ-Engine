@@ -1,8 +1,3 @@
-# Add:
-Conductor stuff
-MusicBeatState
-MusicBeatSubstate
-
 ## Todo:
 Finish TitleState
 Make Mod Folder and Paths for Modding

@@ -34,17 +34,15 @@ class Conductor {
 	public static var onBeatHit:FlxTypedSignal<Int->Void> = new FlxTypedSignal();
 	public static var onStepHit:FlxTypedSignal<Int->Void> = new FlxTypedSignal();
 
-	public static var bpmChanges:Array<BPMChangeEvent> = [];
+	public static var bpmChanges:Array<BPMChangeEvent> = [{bpm: 102, songTime: 0, stepTime: 0}];
 	public static var curChange:BPMChangeEvent;
 
 	public static function mapBPMChanges(song:SwagSong) {
-		bpmChanges = [
-			{
-				bpm: song.bpm,
-				songTime: 0,
-				stepTime: 0
-			}
-		];
+		bpmChanges = [{
+			bpm: song.bpm,
+			songTime: 0,
+			stepTime: 0
+		}];
 
 		var curBPM:Float = song.bpm;
 		var curPos:Float = 0;
@@ -66,7 +64,7 @@ class Conductor {
 		if (!updateSongPos)
 			return;
 
-		songPosition += FlxG.elapsed * songRate;
+		songPosition += FlxG.elapsed  * 1000 * songRate;
 
 		curChange = bpmChanges[0];
 		for (change in bpmChanges) {

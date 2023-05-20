@@ -11,12 +11,14 @@ class Main extends Sprite {
 		super();
 
 		// temporary
-		var controls = Assets.load(TEXT, Paths.getPath('data/temoControls.txt')).split("\n");
+		var controls = sys.io.File.getContent(Paths.getPath('data/tempData.txt')).split("\n");
 		for (i in 0...8)
 			game.Receptor.keybindList[i % 4].push(FlxKey.fromString(controls[i].trim()));
+		game.PlayState.SONG = game.Song.SongParser.parseSongJson("hard", controls[8].trim().toLowerCase());
 
-		addChild(new FlxGame(0, 0, game.PlayState));
+		addChild(new FlxGame(0, 0, game.PlayState, 500, 500, true));
 		addChild(new FPS(10, 10, 0xFFFFFF));
+		FlxG.fixedTimestep = false;
 
 		FlxG.signals.preUpdate.add(Conductor.update);
 	}
