@@ -6,7 +6,7 @@ LEFT
 DOWN
 UP
 RIGHT
-Tutorial
+Bopeebo
 
 like i said, this is temporary.
 The first 8 are keybinds (yes, i use A S 5 6)

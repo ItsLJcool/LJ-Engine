@@ -58,21 +58,17 @@ class HUD extends FlxGroup {
 		notes.forEach(updateNote);
 
         tempTxt.text = 'Hits: ${PlayState.current.TEMP_hits} | Misses: ${PlayState.current.misses} | Song Position: ${Conductor.songPosition}';
-        if (notes.members[0] != null)
-            tempTxt.text += '\n${notes.members[0].x} | ${notes.members[0].y} | $distance';
     }
-
-    var distance:Float = 0;
 
     public function updateNote(note:Note) {
         var strum = (note.mustPress) ? plrStrums[note.direction] : cpuStrums[note.direction];
 		
-		distance = PlayState.SONG.speed * -0.45 * (Conductor.songPosition - note.time);
+		var distance:Float = PlayState.SONG.speed * -0.45 * (Conductor.songPosition - note.time);
         var sinMult:Float = Math.sin(strum.scrollDirection * Math.PI / -180);
         var cosMult:Float = Math.cos(strum.scrollDirection * Math.PI / 180);
 
-		note.x = strum.x + distance * sinMult;
-        note.y = strum.y + distance * cosMult;
+		note.x = (strum.x + strum.width / 2) + distance * sinMult - note.width / 2;
+        note.y = (strum.y + strum.height / 2) + distance * cosMult - note.height / 2;
 
         if (distance <= 0 && !note.mustPress) {
             notes.remove(note, true);
@@ -83,12 +79,42 @@ class HUD extends FlxGroup {
                     strum.playAnim("static", true);
                 strum.animation.finishCallback = null;
             }
+            return;
+        }
+
+        if (note.scrollType != NOTE && note.mustPress) {
+            if (note.canBeHit && strum.holding && !note.wasHit) {
+                note.wasHit = true;
+                strum.playAnim("glow", true);
+            }
+
+            @:privateAccess if (distance < note.height * 0.5 && note.wasHit) {
+                note.yClip = -(distance - note.height * 0.5);
+
+                if (distance < note.height * -0.5) {
+                    notes.remove(note, true);
+                    note.destroy();
+                    return;
+                }
+            }
         }
 
         if (note.tooLate) {
             notes.remove(note, true);
             note.destroy();
             PlayState.current.misses++;
+        }
+    }
+
+    public function hitNote(note:Note) {
+        if (note.wasHit) return;
+
+        note.wasHit = true;
+
+        if (note.scrollType == NOTE) {
+            notes.remove(note, true);
+            note.destroy();
+            PlayState.current.TEMP_hits++;
         }
     }
 
@@ -108,11 +134,14 @@ class HUD extends FlxGroup {
         var animToPlay:String = "ghost";
 
         for (note in notes.members) {
-            if (!note.mustPress || !note.canBeHit || note.direction != strumIndex) continue;
+            if (!note.mustPress || !note.canBeHit || note.direction != strumIndex || note.wasHit) continue;
 
-            notes.remove(note, true);
-            note.destroy();
-            PlayState.current.TEMP_hits++;
+            note.wasHit = true;
+            if (note.scrollType == NOTE) {
+                notes.remove(note, true);
+                note.destroy();
+                PlayState.current.TEMP_hits++;
+            }
 
             animToPlay = "glow";
 

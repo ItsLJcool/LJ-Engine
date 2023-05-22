@@ -3,34 +3,34 @@
 	<!-- Created with Adobe Animate version 23.0.1.70 -->
 	<!-- http://www.adobe.com/products/animate.html -->
 	<SubTexture name="left note0000" x="2" y="161" width="154" height="157"/>
-	<SubTexture name="left hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="left tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="left hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="left tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="down note0000" x="280" y="2" width="157" height="154"/>
-	<SubTexture name="down hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="down tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="down hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="down tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="up note0000" x="316" y="323" width="157" height="154"/>
-	<SubTexture name="up hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="up tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="up hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="up tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="right note0000" x="2" y="323" width="154" height="157"/>
-	<SubTexture name="right hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="right tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="right hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="right tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="square note0000" x="161" y="323" width="150" height="146"/>
-	<SubTexture name="square hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="square tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="square hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="square tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="plus note0000" x="271" y="161" width="139" height="139"/>
-	<SubTexture name="plus hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="plus tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="plus hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="plus tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="doubleleft note0000" x="2" y="2" width="134" height="142"/>
-	<SubTexture name="doubleleft hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="doubleleft tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="doubleleft hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="doubleleft tail0000" x="161" y="161" width="50" height="64"/>
 
 	<SubTexture name="doubleright note0000" x="141" y="2" width="134" height="142"/>
-	<SubTexture name="doubleright hold0000" x="161" y="161" width="50" height="64"/>
-	<SubTexture name="doubleright tail0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="doubleright hold0000" x="216" y="161" width="50" height="44"/>
+	<SubTexture name="doubleright tail0000" x="161" y="161" width="50" height="64"/>
 </TextureAtlas>

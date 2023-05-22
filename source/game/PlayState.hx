@@ -46,17 +46,17 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 		songTracks.play();
 
 		var curBPM = SONG.bpm;
-		var curStepCrochet = (60 / curBPM * 4000);
+		var curStepCrochet = (60 / curBPM * 250);
 		for (section in SONG.notes) {
 			if (section.changeBPM && section.bpm != null && section.bpm != curBPM) {
 				curBPM = section.bpm;
-				curStepCrochet = (60 / curBPM * 4000);
+				curStepCrochet = (60 / curBPM * 250);
 			}
 
 			for (noteData in section.sectionNotes) {
 				var mustPress:Bool = ((noteData[1] % 8 >= 4) != section.mustHitSection);
 
-				var note = new Note(noteData[0], Std.int(noteData[1] % 4), mustPress, NOTE);
+				var note = new Note(noteData[0], Std.int(noteData[1] % 4), mustPress, curStepCrochet, NOTE);
 				hud.queuedNotes.push(note);
 
 				var sustainCount = Math.floor(noteData[2] / curStepCrochet);
@@ -65,9 +65,9 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 						noteData[0] + (curStepCrochet * sustainIndex) + curStepCrochet,
 						Std.int(noteData[1] % 4),
 						mustPress,
+						curStepCrochet,
 						(sustainIndex == sustainCount - 1) ? TAIL : HOLD
 					);
-					note.stepLength = curStepCrochet;
 					hud.queuedNotes.push(note);
 				}
 			}
