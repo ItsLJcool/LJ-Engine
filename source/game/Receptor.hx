@@ -48,6 +48,9 @@ class Receptor extends FlxSprite {
     }
 
     override public function draw() {
+        if (animation.curAnim != null && animation.curAnim.name == "glow" && animation.curAnim.finished && isCpu)
+            playAnim("static", true);
+
         noteShader.noteColor.value[0] = strumColor.redFloat;
         noteShader.noteColor.value[1] = strumColor.greenFloat;
         noteShader.noteColor.value[2] = strumColor.blueFloat;

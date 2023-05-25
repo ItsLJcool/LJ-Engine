@@ -1,5 +1,7 @@
 package game;
 
+import flixel.math.FlxMath;
+import flixel.FlxCamera;
 import backend.Conductor;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import game.HUD;
@@ -10,6 +12,10 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 
 	public static var SONG:game.Song.SwagSong;
 	public var songTracks:SongGroup;
+
+	public var camGame:FlxCamera;
+	public var defaultCamZoom:Float = 1;
+	public var defaultHudZoom:Float = 1;
 
 	public var TEMP_hits:Int = 0;
 	public var score:Int = 0;
@@ -22,20 +28,42 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 		super.create();
 		current = this;
 
+		camGame = new FlxCamera();
+		FlxG.cameras.reset(camGame);
+
 		hud = new HUD();
 		add(hud);
+
+		//this be a test of invalid image asset
+        //TODO remove this later idk
+		//nah ill move it to playstate for camera testing. -srt
+        var sex = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('cock')));
+        add(sex);
 
 		generateSong();
 	}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+
+		var lerpRatio = 0.05 * (FlxG.elapsed / (1 / 60));
+		camGame.zoom = FlxMath.lerp(camGame.zoom, defaultCamZoom, lerpRatio);
+		hud.camHUD.zoom = FlxMath.lerp(hud.camHUD.zoom, defaultHudZoom, lerpRatio);
 	}
 
 	override public function stepHit(curStep:Int) {
 		super.stepHit(curStep);
 
 		songTracks.tryResync();
+	}
+
+	override public function beatHit(curBeat:Int) {
+		super.beatHit(curBeat);
+
+		if (curBeat % 4 == 0) {
+			camGame.zoom += 0.015;
+			hud.camHUD.zoom += 0.03;
+		}
 	}
 
 	function generateSong() {

@@ -1,5 +1,6 @@
 package game;
 
+import flixel.FlxCamera;
 import openfl.events.KeyboardEvent;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
@@ -15,6 +16,8 @@ class HUD extends FlxGroup {
 	public var notes:FlxTypedGroup<Note>;
 	public var queuedNotes:Array<Note> = [];
 
+    public var camHUD:FlxCamera;
+
     public var tempTxt:FlxText;
 
     public function new() {
@@ -24,6 +27,7 @@ class HUD extends FlxGroup {
         add(strums);
         for (i in 0...4) {
             var cpuStrum = new Receptor(100 + Note.swagWidth * i, 50, i);
+            cpuStrum.isCpu = true;
             cpuStrums.push(cpuStrum);
             strums.insert(i , cpuStrum);
 
@@ -39,10 +43,10 @@ class HUD extends FlxGroup {
         tempTxt.alignment = CENTER;
         add(tempTxt);
 
-        //this be a test of invalid image asset
-        //TODO remove this later idk
-        var sex = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('cock')));
-        add(sex);
+        camHUD = new FlxCamera();
+        camHUD.bgColor.alpha = 0;
+        FlxG.cameras.add(camHUD, false);
+        cameras = [camHUD];
 
         FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
         FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
@@ -75,26 +79,26 @@ class HUD extends FlxGroup {
 		note.x = (strum.x + strum.width / 2) + distance * sinMult - note.width / 2;
         note.y = (strum.y + strum.height / 2) + distance * cosMult - note.height / 2;
 
-        if (distance <= 0 && !note.mustPress) {
+        if (distance <= 0 && !note.mustPress && note.scrollType == NOTE) {
             notes.remove(note, true);
             note.destroy();
             strum.playAnim("glow", true);
-            strum.animation.finishCallback = (name:String) -> {
-                if (name == "glow")
-                    strum.playAnim("static", true);
-                strum.animation.finishCallback = null;
-            }
             return;
         }
 
-        if (note.scrollType != NOTE && note.mustPress) {
-            if (note.canBeHit && strum.holding && !note.wasHit) {
+        if (note.scrollType != NOTE) {
+            if (note.canBeHit && strum.holding && note.mustPress && !note.wasHit) {
                 note.wasHit = true;
                 strum.playAnim("glow", true);
             }
 
-            @:privateAccess if (distance < note.height * 0.5 && note.wasHit) {
-                note.yClip = -(distance - note.height * 0.5);
+            if (distance < note.height * 0.5 && (note.wasHit || !note.mustPress)) {
+                if (!note.mustPress && !note.wasHit) {
+                    note.wasHit = true;
+                    strum.playAnim("glow", true);
+                }
+
+                note.yClip = -(distance - note.height * 0.5) / note.scale.y;
 
                 if (distance < note.height * -0.5) {
                     notes.remove(note, true);
@@ -111,18 +115,6 @@ class HUD extends FlxGroup {
         }
     }
 
-    public function hitNote(note:Note) {
-        if (note.wasHit) return;
-
-        note.wasHit = true;
-
-        if (note.scrollType == NOTE) {
-            notes.remove(note, true);
-            note.destroy();
-            PlayState.current.TEMP_hits++;
-        }
-    }
-
     public function keyDown(event:KeyboardEvent) {
         if (PlayState.current.subState != null) return;
 
@@ -134,7 +126,7 @@ class HUD extends FlxGroup {
             }
         }
 
-        if (strumIndex < 0) return;
+        if (strumIndex < 0 || plrStrums[strumIndex].holding) return;
 
         var animToPlay:String = "ghost";
 
