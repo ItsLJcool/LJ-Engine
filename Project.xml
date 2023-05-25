@@ -31,7 +31,9 @@
 
 	<set name="BUILD_DIR" value="export" />
 	<source path="source" />
-	<assets path="assets" />
+	<assets path="assets" exclude="embedded" />
+
+	<assets path="assets/embedded" embed="true" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
@@ -42,6 +44,7 @@
 	
 	<haxedef name="hscriptPos"/>
 	<haxedef name="openflPos"/>
+
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->

@@ -1,4 +1,3 @@
-// a
 package assets;
 
 import flixel.graphics.FlxGraphic;
@@ -57,7 +56,7 @@ class Assets {
 						var bmp = BitmapData.fromFile(path);
 						// Load default flixel image if image couldn't be found
 						if (bmp == null)
-							bmp = openfl.Assets.getBitmapData("flixel/images/logo/default.png");
+							bmp = openfl.Assets.getBitmapData("assets/embedded/whoops.png");
 
 						cache.add(path, FlxGraphic.fromBitmapData(bmp, false, path, false));
 					}

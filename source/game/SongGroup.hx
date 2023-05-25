@@ -1,7 +1,7 @@
 package game;
 
 import backend.Conductor;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import haxe.io.Path;
 
 class SongGroup {

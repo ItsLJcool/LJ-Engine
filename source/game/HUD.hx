@@ -39,6 +39,11 @@ class HUD extends FlxGroup {
         tempTxt.alignment = CENTER;
         add(tempTxt);
 
+        //this be a test of invalid image asset
+        //TODO remove this later idk
+        var sex = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('cock')));
+        add(sex);
+
         FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
         FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
     }
