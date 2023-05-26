@@ -56,6 +56,9 @@ class SongParser {
 				section.lengthInSteps = section.sectionBeats * 4;
 		}
 
+		if (parsedJson.stage == null)
+			parsedJson.stage = "stage";
+
         var swagShit:SwagSong = cast parsedJson;
 		swagShit.validScore = true;
 		return swagShit;

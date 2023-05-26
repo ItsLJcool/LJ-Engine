@@ -1,5 +1,7 @@
 package game;
 
+import scripts.HScript;
+import scripts.ScriptInterface;
 import flixel.math.FlxMath;
 import flixel.FlxCamera;
 import backend.Conductor;
@@ -24,6 +26,8 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 
 	public var hud:HUD;
 
+	public var scripts:Array<ScriptInterface> = [];
+
 	override public function create() {
 		super.create();
 		current = this;
@@ -34,13 +38,23 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 		hud = new HUD();
 		add(hud);
 
-		//this be a test of invalid image asset
-        //TODO remove this later idk
-		//nah ill move it to playstate for camera testing. -srt
-        var sex = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('cock')));
-        add(sex);
+		var stagePath = Paths.script('data/stages/${SONG.stage}');
+		if (stagePath != null) {
+			var stageScript = new HScript(stagePath);
+			if (stageScript.scriptFailed)
+				stageScript.destroy();
+			else {
+				stageScript.parent = this;
+				scripts.push(stageScript);
+			}
+		}
+
+		callInScripts("create");
 
 		generateSong();
+
+		callInScripts("createPost");
+		callInScripts("postCreate");
 	}
 
 	override public function update(elapsed:Float) {
@@ -115,5 +129,22 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 	override public function destroy() {
 		super.destroy();
 		current = null;
+	}
+
+	public function setInScripts(varName:String, value:Dynamic) {
+		for (script in scripts)
+			script.set(varName, value);
+	}
+
+	public function callInScripts(funcName:String, ?params:Array<Dynamic>) {
+		var toReturn:Dynamic = null;
+
+		for (script in scripts) {
+			var scriptResult = script.call(funcName, params);
+			if (scriptResult != null)
+				toReturn = scriptResult;
+		}
+
+		return toReturn;
 	}
 }

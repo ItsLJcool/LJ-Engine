@@ -39,12 +39,10 @@
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
-	<haxelib name="TeaScript"/>
+	<haxelib name="hscript-improved"/>
 	<haxelib name="flixel-ui" />
 	
 	<haxedef name="hscriptPos"/>
-	<haxedef name="openflPos"/>
-
 
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->

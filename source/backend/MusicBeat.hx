@@ -3,6 +3,8 @@ package backend;
 import backend.Conductor;
 
 class MusicBeatState extends flixel.addons.ui.FlxUIState {
+    public var publicVars:Map<String, Dynamic> = [];
+
     public var curBeat(get, null):Int = 0;
     inline function get_curBeat():Int
         return Conductor.curBeat;
