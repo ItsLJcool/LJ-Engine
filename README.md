@@ -2,7 +2,7 @@
   
 # YoshiCrafterEngine-LJ-Optimized
 
-This is going to be a whole Re-do of YoshiCrafterEngine, engine and hopefully optimize it better. Help is apprechiated.
+This is going to be a whole Re-do of YoshiCrafterEngine, engine and hopefully optimize it better. Help is appreciated.
 
 # What is YCE-Opt?
 
@@ -13,7 +13,7 @@ Codename Engine is supposed to be better than YCE, it might be, but the way he s
 Allegedly CNE performs **Worse** than Psych Engine in some cases, and at that point it drew some lines for some people.
 Yoshi no longer works on CNE due to "Controversy" about things I don't pay attention to so idk what happened.
 
-This Engine is going to try to innovate upon its predecessor Engine, and impove how Engines will work in the future
+This Engine is going to try to innovate upon its predecessor Engine, and improve how Engines will work in the future
   
 If you want to see what we plan on adding, go to the [toAdd](https://github.com/ItsLJcool/YoshiCrafterEngine-LJ-Optimized/tree/main/toAdd) folder.
 
@@ -22,7 +22,7 @@ If you want to see what we plan on adding, go to the [toAdd](https://github.com/
 Currently, helping on a project that has nothing in it won't help but in the future basically you would
 fork this Repo and making changes on your own github, then **[requesting a push / pull request here](https://github.com/ItsLJcool/YoshiCrafterEngine-LJ-Optimized/pulls)**
   
-# How to help Right Now
+# How to help right now
 
 If you want to help, then DM me on Discord (ItsLJcool#7560) and show me some coding you have done on FNF mods.
 
