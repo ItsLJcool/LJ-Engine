@@ -29,3 +29,4 @@ Thanks to the YCE Community for everything
 
 ## If you havent already...
 Join the [CNE / YCE Discord Server](https://discord.gg/9Jt6dK76gK) (Owned by YoshiCrafter29)
+And the new [YoshiCrafter Engine Discord](https://discord.gg/CbSNqEnecM) (Owned by Swordcube)
