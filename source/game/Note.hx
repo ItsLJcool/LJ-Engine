@@ -18,9 +18,10 @@ class NoteShader extends FlxGraphicsShader {
     
     uniform float yClip;
     uniform float frameY;
+    uniform bool invert;
     
     void main() {
-        if (openfl_TextureCoordv.y < (frameY + yClip) / openfl_TextureSize.y)
+        if ((openfl_TextureCoordv.y < (frameY + yClip) / openfl_TextureSize.y && !invert) || (1 - openfl_TextureCoordv.y < (frameY + yClip) / openfl_TextureSize.y && invert))
             discard;
 
         vec4 texColor = flixel_texture2D(bitmap, openfl_TextureCoordv);
@@ -77,6 +78,11 @@ class Note extends FlxSprite {
 
     public var wasHit:Bool = false;
 
+    //Visual stuff.
+    public var yClip:Float = 0;
+    public var noteShader:NoteShader;
+    public var noteColor:FlxColor;
+
     public function new(time:Float, direction:Int, mustPress:Bool, stepLength:Float, ?scrollType:NoteScrollType = NOTE) {
         super(-999, -999);
 
@@ -113,21 +119,33 @@ class Note extends FlxSprite {
 
         updateHitbox();
 
-        shader = new NoteShader(
-            [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F][direction],
+        noteColor = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F][direction];
+        shader = noteShader = new NoteShader(
+            noteColor,
             true
         );
     }
 
-    public var yClip:Float = 0;
-
     override public function draw() {
-        if (shader is NoteShader) {
-            var noteShader = cast (shader, NoteShader);
-            noteShader.frameY.value = [frame.frame.top];
-            noteShader.yClip.value = [yClip];
-        }
+        noteShader.frameY.value = [frame.frame.top];
+        noteShader.yClip.value = [yClip];
+        noteShader.noteColor.value[0] = noteColor.redFloat;
+        noteShader.noteColor.value[1] = noteColor.greenFloat;
+        noteShader.noteColor.value[2] = noteColor.blueFloat;
+        noteShader.invert.value = [backend.Settings.downscroll && scrollType != NOTE];
 
-        super.draw();
+        if (backend.Settings.downscroll) {
+            var ogY = y;
+            var scaleYMult = (scrollType != NOTE) ? -1 : 1;
+
+            y = FlxG.height - (frameHeight * scale.y) - y;
+            scale.y *= scaleYMult;
+            super.draw();
+            scale.y *= scaleYMult;
+            y = ogY;
+        } else
+            super.draw();
+
+        noteShader.invert.value = [false];
     }
 }

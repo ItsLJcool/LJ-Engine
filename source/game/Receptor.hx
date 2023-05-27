@@ -12,6 +12,7 @@ class Receptor extends FlxSprite {
     public var holding:Bool = false;
     public var isCpu:Bool = false;
 
+    //Visual stuff.
     public var noteShader:NoteShader;
     public var strumColor:FlxColor;
 
@@ -56,6 +57,13 @@ class Receptor extends FlxSprite {
         noteShader.noteColor.value[2] = strumColor.blueFloat;
         noteShader.noteColor.value[3] = (animation.curAnim != null && animation.curAnim.name != "static") ? 1 : 0;
 
-        super.draw();
+        if (backend.Settings.downscroll) {
+            var ogY = y;
+
+            y = FlxG.height - y - height;
+            super.draw();
+            y = ogY;
+        } else
+            super.draw();
     }
 }

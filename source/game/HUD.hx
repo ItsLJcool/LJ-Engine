@@ -16,6 +16,11 @@ class HUD extends FlxGroup {
 	public var notes:FlxTypedGroup<Note>;
 	public var queuedNotes:Array<Note> = [];
 
+    /**
+     * These objects will invert their y position when downscroll is on.
+     */
+    public var hudScrollObjects:Array<flixel.FlxObject> = [];
+
     public var camHUD:FlxCamera;
 
     public var tempTxt:FlxText;
@@ -42,6 +47,7 @@ class HUD extends FlxGroup {
         tempTxt = new FlxText(0, 600, FlxG.width, "Hits: 0 | Misses: 0", 24);
         tempTxt.alignment = CENTER;
         add(tempTxt);
+        hudScrollObjects.push(tempTxt);
 
         camHUD = new FlxCamera();
         camHUD.bgColor.alpha = 0;
@@ -76,9 +82,6 @@ class HUD extends FlxGroup {
         var sinMult:Float = Math.sin(strum.scrollDirection * Math.PI / -180);
         var cosMult:Float = Math.cos(strum.scrollDirection * Math.PI / 180);
 
-		note.x = (strum.x + strum.width / 2) + distance * sinMult - note.width / 2;
-        note.y = (strum.y + strum.height / 2) + distance * cosMult - note.height / 2;
-
         if (distance <= 0 && !note.mustPress && note.scrollType == NOTE) {
             notes.remove(note, true);
             note.destroy();
@@ -87,6 +90,8 @@ class HUD extends FlxGroup {
         }
 
         if (note.scrollType != NOTE) {
+            note.angle = strum.scrollDirection;
+
             if (note.canBeHit && strum.holding && note.mustPress && !note.wasHit) {
                 note.wasHit = true;
                 strum.playAnim("glow", true);
@@ -108,11 +113,31 @@ class HUD extends FlxGroup {
             }
         }
 
+		note.x = (strum.x + strum.width / 2) + distance * sinMult - note.width / 2;
+        note.y = (strum.y + strum.height / 2) + distance * cosMult - note.height / 2;
+
         if (note.tooLate) {
             notes.remove(note, true);
             note.destroy();
             PlayState.current.misses++;
         }
+    }
+
+    override public function draw() {
+        if (backend.Settings.downscroll) {
+            var ogYArray:Array<Float> = [];
+            for (object in hudScrollObjects) {
+                ogYArray.push(object.y);
+                object.y = FlxG.height - object.height - object.y;
+            }
+
+            super.draw();
+
+            for (i => object in hudScrollObjects) {
+                object.y = ogYArray[i];
+            }
+        } else
+            super.draw();
     }
 
     public function keyDown(event:KeyboardEvent) {

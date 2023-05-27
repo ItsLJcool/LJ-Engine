@@ -21,6 +21,7 @@ class HScript implements scripts.ScriptInterface {
 
         "Paths" => Paths,
         "Assets" => Assets,
+        "Settings" => backend.Settings
     ];
     public static var statics:Map<String, Dynamic> = [];
     public static var parser:Parser;

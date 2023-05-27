@@ -58,17 +58,25 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 	}
 
 	override public function update(elapsed:Float) {
+		callInScripts("preUpdate", [elapsed]);
+
 		super.update(elapsed);
 
 		var lerpRatio = 0.05 * (FlxG.elapsed / (1 / 60));
 		camGame.zoom = FlxMath.lerp(camGame.zoom, defaultCamZoom, lerpRatio);
 		hud.camHUD.zoom = FlxMath.lerp(hud.camHUD.zoom, defaultHudZoom, lerpRatio);
+
+		callInScripts("update", [elapsed]);
+		callInScripts("updatePost", [elapsed]);
+		callInScripts("postUpdate", [elapsed]);
 	}
 
 	override public function stepHit(curStep:Int) {
 		super.stepHit(curStep);
 
 		songTracks.tryResync();
+
+		callInScripts("stepHit", [curStep]);
 	}
 
 	override public function beatHit(curBeat:Int) {
@@ -78,6 +86,8 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 			camGame.zoom += 0.015;
 			hud.camHUD.zoom += 0.03;
 		}
+
+		callInScripts("beatHit", [curBeat]);
 	}
 
 	function generateSong() {
@@ -127,6 +137,7 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 	}
 
 	override public function destroy() {
+		callInScripts("destroy");
 		super.destroy();
 		current = null;
 	}
