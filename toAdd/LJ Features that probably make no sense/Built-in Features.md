@@ -21,3 +21,8 @@ In relation to the Mod List, you can rate Mods in-engine and people can see the 
 # User Profiles
 All of your YCE-opt will be displayed under your User Profile.
 You can link your YouTube, Twitter, Discord Server, and GitHub accounts with your User Profile.
+
+# Mod Tags
+Will show up and display next to the mod in Mod List
+
+Ex Tags: `Modcharts`, `Mechanics`, `Dave And Bambi`, `Port`, `Experimental Features`, `Verified`
