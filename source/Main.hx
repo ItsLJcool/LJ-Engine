@@ -16,7 +16,7 @@ class Main extends Sprite {
 			game.Receptor.keybindList[i % 4].push(FlxKey.fromString(controls[i].trim()));
 		game.PlayState.SONG = game.Song.SongParser.parseSongJson("hard", controls[8].trim().toLowerCase());
 
-		addChild(new FlxGame(0, 0, game.PlayState, 500, 500, true));
+		addChild(new FlxGame(0, 0, menus.TitleState, 500, 500, true));
 		addChild(new FPS(10, 10, 0xFFFFFF));
 		FlxG.fixedTimestep = false;
 

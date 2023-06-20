@@ -59,8 +59,7 @@ class Assets {
 							bmp = openfl.Assets.getBitmapData("assets/embedded/whoops.png");
 
 						cache.add(path, FlxGraphic.fromBitmapData(bmp, false, path, false));
-					}
-					return cache.get(path);
+					} return cache.get(path);
 				case SPARROW:
 					return FlxAtlasFrames.fromSparrow(load(IMAGE, FileSystem.absolutePath(path)),
 						load(XML, FileSystem.absolutePath(path).replace(".png", ".xml")));
@@ -82,9 +81,8 @@ class Assets {
 			return null;
 		}
 	}
-}
+} class AssetCache {
 
-class AssetCache {
 	public function new() {}
 
 	var cache:Map<String, Any> = new Map();
@@ -94,7 +92,7 @@ class AssetCache {
 		var items = 0;
 		for (asset in cache.keys())
 			items++;
-		trace('Asset cache has $items asset');
+		// trace('Asset cache has $items asset');
 	}
 
 	public function get(path:String) {
