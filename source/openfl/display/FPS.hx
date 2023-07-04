@@ -50,7 +50,7 @@ class FPS extends TextField {
 
 		if (visible) {
 			text = "FPS: " + times.length + "\nMEM: " + FlxStringUtil.formatBytes(mem) + "\nMEM peak: " + FlxStringUtil.formatBytes(memPeak)
-				+ "\nLJ Engine Version: " + Main.engineVersion;
+				+ "\nLJ Engine " + Main.engineVersion;
 		}
 	}
 }
