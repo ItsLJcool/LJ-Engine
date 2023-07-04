@@ -1,5 +1,6 @@
 package game;
 
+import backend.Settings;
 import backend.Conductor;
 import flixel.graphics.tile.FlxGraphicsShader;
 import flixel.math.FlxRect;
@@ -119,7 +120,7 @@ enum NoteScrollType {
 
 		updateHitbox();
 
-		noteColor = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F][direction];
+		noteColor = Settings.colors[direction];
 		shader = noteShader = new NoteShader(noteColor, true);
 	}
 
@@ -129,9 +130,9 @@ enum NoteScrollType {
 		noteShader.noteColor.value[0] = noteColor.redFloat;
 		noteShader.noteColor.value[1] = noteColor.greenFloat;
 		noteShader.noteColor.value[2] = noteColor.blueFloat;
-		noteShader.invert.value = [backend.Settings.downscroll && scrollType != NOTE];
+		noteShader.invert.value = [Settings.downscroll && scrollType != NOTE];
 
-		if (backend.Settings.downscroll) {
+		if (Settings.downscroll) {
 			var ogY = y;
 			var scaleYMult = (scrollType != NOTE) ? -1 : 1;
 
