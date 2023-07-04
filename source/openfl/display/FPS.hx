@@ -49,12 +49,8 @@ class FPS extends TextField {
 			memPeak = mem;
 
 		if (visible) {
-			text = "FPS: "
-				+ times.length
-				+ "\nMEM: "
-				+ FlxStringUtil.formatBytes(mem)
-				+ "\nMEM peak: "
-				+ FlxStringUtil.formatBytes(memPeak);
+			text = "FPS: " + times.length + "\nMEM: " + FlxStringUtil.formatBytes(mem) + "\nMEM peak: " + FlxStringUtil.formatBytes(memPeak)
+				+ "\nLJ Engine Version: " + Main.engineVersion;
 		}
 	}
 }

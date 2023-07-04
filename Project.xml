@@ -3,11 +3,11 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' - YoshiCrafter Engine" main="Main" version="1.0.0.0" company="ItsLJcool"/>
-	<app file="YoshiCrafterEngine - Windows" if="windows" />
-	<app file="YoshiCrafterEngine - Linux" if="linux" />
-	<app file="YoshiCrafterEngine - Mac" if="mac" />
-	<app file="YoshiCrafterEngine - Android" if="android" />
+	<app title="Friday Night Funkin' - LJ Engine" main="Main" version="1.0.0" company="ItsLJcool"/>
+	<app file="LJ Engine - Windows" if="windows" />
+	<app file="LJ Engine - Linux" if="linux" />
+	<app file="LJ Engine - Mac" if="mac" />
+	<app file="LJ Engine - Android" if="android" />
 	<!-- <app file="Yoshi Engine (x64)" unless="32bit" /> -->
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
@@ -89,9 +89,10 @@
 
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<set name="Version" value="1.0.0 Alpha" />
-	<!-- <haxedef name="Alpha"/> -->
-	<!-- <haxedef name="Beta"/> -->
+	<set name="version" value="1.0.0" />
+	<haxedef name="alpha"/>
+	<!-- <haxedef name="beta"/> -->
+	<!-- <haxedef name="official"/> -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 	<icon path="art/icon16.png" size='16'/>
