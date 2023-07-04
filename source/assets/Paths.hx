@@ -15,8 +15,26 @@ class Paths {
 		return FileSystem.absolutePath('assets/$path');
 	}
 
+    public inline static function getAllMods():Array<String> {
+        var modArry = FileSystem.readDirectory(FileSystem.absolutePath('mods/'));
+        if (modArry.length < 1) return [];
+        var tempArry:Array<String> = [];
+        for (mod in modArry) {
+            if (!FileSystem.isDirectory(FileSystem.absolutePath('mods/$mod'))) continue;
+            tempArry.push(mod);
+        }
+        return tempArry;
+    }
+
 	public inline static function image(path:String):String {
 		return getPath('images/$path.png');
+	}
+
+	/**
+		@param path Make sure you Define the extension (ex: font.ttf / font.otf)
+	**/
+	public inline static function font(path:String):String {
+		return getPath('fonts/$path');
 	}
 
 	public inline static function loadImage(path:String):String {

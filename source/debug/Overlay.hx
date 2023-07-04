@@ -13,6 +13,7 @@ using StringTools;
 
 class Overlay extends Sprite {
 	private var title:TextField;
+	private var info:TextField;
 
 	public function new() {
 		super();
@@ -20,21 +21,39 @@ class Overlay extends Sprite {
 		title.autoSize = LEFT;
 		title.selectable = false;
 		title.textColor = 0xFFFFFFFF;
-		title.defaultTextFormat = new TextFormat("vcr", 16); // figure out font lator
+		title.defaultTextFormat = new TextFormat(Paths.font("sans extra bold.ttf"), 16);
 		title.text = 'LJ Engine (PlaceHolder Name) | ${Main.engineVersion}';
 		title.y += 15;
+		title.x += 15;
 		addChild(title);
+
+		
+		info = new TextField();
+		info.autoSize = LEFT;
+		info.selectable = false;
+		info.textColor = 0xFFFFFFFF;
+		info.multiline = true;
+		info.defaultTextFormat = new TextFormat(Paths.font("sans extra bold.ttf"), 24);
+		info.text = 'Alpha Debug Tools:'
+		+ '\nF1: menus.TitleState'
+		+ '\nF5: Closes Debug Tools'
+		+ '\nF6: modding.Toolbox.ToolboxMain';
+		info.y = title.y + title.height;
+		info.x += 15;
+		addChild(info);
 
 		visible = true;
 		toggleOverlay();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, function(e:KeyboardEvent) {
 			switch (e.keyCode) {
+				case Keyboard.F1:
+					if (visible)
+						FlxG.switchState(new menus.TitleState());
 				case Keyboard.F6:
 					toggleOverlay();
 				case Keyboard.F7:
-					if (visible) {
+					if (visible)
 						FlxG.switchState(new modding.Toolbox.ToolboxMain());
-					}
 			}
 		});
 	}

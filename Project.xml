@@ -3,7 +3,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' - LJ Engine" main="Main" version="1.0.0" company="ItsLJcool"/>
+	<app title="Friday Night Funkin' - LJ Engine" main="Main" version="1.0.1" company="ItsLJcool"/>
 	<app file="LJ Engine - Windows" if="windows" />
 	<app file="LJ Engine - Linux" if="linux" />
 	<app file="LJ Engine - Mac" if="mac" />
@@ -88,8 +88,6 @@
 	<haxedef name="HXCPP_DEBUG_LINK"/>
 
 	<!-- _________________________________ Custom _______________________________ -->
-
-	<set name="version" value="1.0.1" />
 	<haxedef name="alpha"/>
 	<!-- <haxedef name="beta"/> -->
 	<!-- <haxedef name="official"/> -->

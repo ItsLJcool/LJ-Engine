@@ -7,12 +7,18 @@ import openfl.display.FPS;
 using StringTools;
 
 class Main extends Sprite {
-	public static var version:String = 'Version: 1.0.1 '; // ${Application.current.meta.get('version')}
+	static var versionNum(get, never):String;
+	static function get_versionNum() {
+  		return Application.current.meta.get('version');
+	}
+	public static var version:String = '';
 	public static var debugInfo:String = #if alpha "Alpha" #elseif beta "Beta" #elseif official "" #else "Custom (Source Modded)" #end;
-	public static var engineVersion:String = version + debugInfo;
+	public static var engineVersion:String = '';
 
 	public function new() {
 		super();
+		version = 'Version: $versionNum ';
+		engineVersion = version + debugInfo;
 
 		// temporary
 		var controls = sys.io.File.getContent(Paths.getPath('data/tempData.txt')).split("\n");
