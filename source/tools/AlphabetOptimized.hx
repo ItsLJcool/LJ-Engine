@@ -205,7 +205,7 @@ class AlphabetOptimized extends FlxSpriteGroup {
 		if (json == null || jsonLength != jsonText.length) {
 			try {
 				json = Json.parse(jsonText);
-            }
+			}
 			catch (e) {
 				trace(e.details());
 			}
@@ -505,7 +505,7 @@ class AlphabetOptimized extends FlxSpriteGroup {
 
 		lastDrawLines = line + 1;
 	}
-} class OutlineShader extends FlxFixedShader {
+} class OutlineShader extends tools.FlxFixedShader {
 
 	@:glFragmentSource('#pragma header
 
