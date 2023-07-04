@@ -3,12 +3,14 @@ package assets;
 import haxe.Json;
 
 class Paths {
-	public static var CURRENT_MOD = "Funkin'";
+	public static var CURRENT_MOD = "Template Mod";
 
-	public inline static function getPath(path:String):String {
-		var daPath = FileSystem.absolutePath('mods/$CURRENT_MOD/$path');
-		if (FileSystem.exists(daPath))
-			return daPath;
+	public static function getPath(path:String, forceAssets:Bool = false):String {
+			if (!forceAssets) {
+			var daPath = FileSystem.absolutePath('mods/$CURRENT_MOD/$path');
+			if (FileSystem.exists(daPath))
+				return daPath;
+		}
 
 		return FileSystem.absolutePath('assets/$path');
 	}

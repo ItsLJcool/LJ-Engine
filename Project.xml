@@ -36,7 +36,7 @@
 	<set name="BUILD_DIR" value="export" />
 	<source path="source" />
 	<assets path="assets" exclude="embedded" />
-
+	<assets path="mods"/>
 	<assets path="assets/embedded" embed="true" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
@@ -89,7 +89,7 @@
 
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<set name="version" value="1.0.0" />
+	<set name="version" value="1.0.1" />
 	<haxedef name="alpha"/>
 	<!-- <haxedef name="beta"/> -->
 	<!-- <haxedef name="official"/> -->

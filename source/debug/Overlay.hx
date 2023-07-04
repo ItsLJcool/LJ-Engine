@@ -31,6 +31,10 @@ class Overlay extends Sprite {
 			switch (e.keyCode) {
 				case Keyboard.F6:
 					toggleOverlay();
+				case Keyboard.F7:
+					if (visible) {
+						FlxG.switchState(new modding.Toolbox.ToolboxMain());
+					}
 			}
 		});
 	}
@@ -43,6 +47,7 @@ class Overlay extends Sprite {
 
 	public override function __enterFrame(deltaTime:Int) {
 		super.__enterFrame(deltaTime);
+		if (!visible) return;
 
 		graphics.clear();
 		graphics.beginFill(0x000000, 0.5);
