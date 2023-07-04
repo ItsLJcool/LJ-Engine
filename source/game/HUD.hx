@@ -86,6 +86,7 @@ class HUD extends FlxGroup {
             notes.remove(note, true);
             note.destroy();
             strum.playAnim("glow", true);
+            PlayState.current.dad.playAnim(animFromDirection(note.direction), true);
             return;
         }
 
@@ -95,12 +96,14 @@ class HUD extends FlxGroup {
             if (note.canBeHit && strum.holding && note.mustPress && !note.wasHit) {
                 note.wasHit = true;
                 strum.playAnim("glow", true);
+                PlayState.current.boyfriend.playAnim(animFromDirection(note.direction), true);
             }
 
             if (distance < note.height * 0.5 && (note.wasHit || !note.mustPress)) {
                 if (!note.mustPress && !note.wasHit) {
                     note.wasHit = true;
                     strum.playAnim("glow", true);
+                    PlayState.current.dad.playAnim(animFromDirection(note.direction), true);
                 }
 
                 note.yClip = -(distance - note.height * 0.5) / note.scale.y;
@@ -159,6 +162,7 @@ class HUD extends FlxGroup {
             if (!note.mustPress || !note.canBeHit || note.direction != strumIndex || note.wasHit) continue;
 
             note.wasHit = true;
+            PlayState.current.boyfriend.playAnim(animFromDirection(note.direction), true);
             if (note.scrollType == NOTE) {
                 notes.remove(note, true);
                 note.destroy();
@@ -173,6 +177,9 @@ class HUD extends FlxGroup {
         plrStrums[strumIndex].holding = true;
         plrStrums[strumIndex].playAnim(animToPlay, true);
     }
+
+    function animFromDirection(direction:Int, ?prefix:String = "") //The line without this was getting too long.
+        return ["singLEFT", "singDOWN", "singUP", "singRIGHT"][direction] + prefix;
 
     public function keyUp(event:KeyboardEvent) {
         if (PlayState.current.subState != null) return;

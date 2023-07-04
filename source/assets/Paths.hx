@@ -6,6 +6,10 @@ class Paths {
 	public static var CURRENT_MOD = "Funkin'";
 
 	public inline static function getPath(path:String):String {
+		var daPath = FileSystem.absolutePath('mods/$CURRENT_MOD/$path');
+		if (FileSystem.exists(daPath))
+			return daPath;
+
 		return FileSystem.absolutePath('assets/$path');
 	}
 
@@ -17,8 +21,11 @@ class Paths {
 		return Assets.load(IMAGE, image(path));
 	}
 
-	public inline static function getSparrowAtlas(path:String) {
-		return Assets.load(SPARROW, image(path));
+	public inline static function getSparrowAtlas(path:String, ?useImagesFolder:Bool = true) {
+		return Assets.load(
+			SPARROW,
+			((useImagesFolder) ? image(path) : getPath('$path.png'))
+		);
 	}
 
 	public inline static function sound(path:String):String {
@@ -57,6 +64,18 @@ class Paths {
 		for (ext in exts) {
 			if (FileSystem.exists(getPath('$path.$ext')))
 				return getPath('$path.$ext');
+		}
+
+		return null;
+	}
+
+	public static function getCharacter(char:String) {
+		var suffixes:Array<String> = [".xml", ".txt"];
+		var assetTypes:Array<assets.AssetType> = [SPARROW, PACKER];
+
+		for (i => suffix in suffixes) {
+			if (FileSystem.exists(getPath('characters/$char/spritesheet$suffix')))
+				return Assets.load(assetTypes[i], getPath('characters/$char/spritesheet.png'));
 		}
 
 		return null;

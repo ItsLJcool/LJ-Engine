@@ -85,7 +85,7 @@ class HScript implements scripts.ScriptInterface {
         Sys.println(errorString);
     }
 
-    public function get(name:String) {
+    public function get(name:String):Dynamic {
         if (interp == null)
             return null;
         return interp.variables.get(name);
@@ -96,7 +96,7 @@ class HScript implements scripts.ScriptInterface {
             interp.variables.set(name, value);
     }
 
-    public function call(name:String, ?params:Array<Dynamic>) {
+    public function call(name:String, ?params:Array<Dynamic>):Dynamic {
         if (interp == null) return null;
 
         var functionVar = interp.variables.get(name);

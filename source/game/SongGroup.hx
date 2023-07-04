@@ -9,7 +9,7 @@ class SongGroup {
 
     public function new(songName:String) {
         var audioFolder = Paths.getPath('songs/$songName/audio');
-        for (audio in FileSystem.readDirectory(Paths.getPath('songs/$songName/audio'))) {
+        for (audio in FileSystem.readDirectory(audioFolder)) {
             if (Path.extension(audio) == "ogg" || Path.extension(audio) == "mp3" || Path.extension(audio) == "wav") {
                 var sound = new FlxSound();
                 sound.loadEmbedded(Assets.load(SOUND, Paths.getPath('songs/$songName/audio/$audio')));

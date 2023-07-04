@@ -1,5 +1,6 @@
 package game;
 
+import backend.Settings;
 import flixel.util.FlxColor;
 import game.Note.NoteShader;
 import flixel.input.keyboard.FlxKey;
@@ -31,7 +32,7 @@ class Receptor extends FlxSprite {
         scale.scale(0.7);
         updateHitbox();
 
-        strumColor = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F][direction];
+        strumColor = Settings.colors[direction];
         shader = noteShader = new NoteShader(
             strumColor,
             false
@@ -57,7 +58,7 @@ class Receptor extends FlxSprite {
         noteShader.noteColor.value[2] = strumColor.blueFloat;
         noteShader.noteColor.value[3] = (animation.curAnim != null && animation.curAnim.name != "static") ? 1 : 0;
 
-        if (backend.Settings.downscroll) {
+        if (Settings.downscroll) {
             var ogY = y;
 
             y = FlxG.height - y - height;
