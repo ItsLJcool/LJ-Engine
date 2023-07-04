@@ -27,7 +27,7 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
 
         for (mod in mods) {
             var spr:ModCard = new ModCard();
-            spr.x += 150;
+            // spr.x += 150;
             modCards.add(spr);
         }
     }
@@ -48,7 +48,7 @@ class ModCard extends FlxTypedGroup<FlxSprite> {
     override public function new() {
         super();
         bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image("menus/modCardBG")));
-        bg.scale.set(0.5,0.5);
+        bg.scale.set(0.25,0.25);
         bg.updateHitbox();
         bg.screenCenter();
         add(bg);
