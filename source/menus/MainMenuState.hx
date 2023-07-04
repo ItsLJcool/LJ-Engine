@@ -1,3 +1,5 @@
 package menus;
 
-class MainMenuState extends backend.Conductor {}
+import backend.MusicBeat.MusicBeatState;
+
+class MainMenuState extends MusicBeatState {}
