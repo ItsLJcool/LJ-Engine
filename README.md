@@ -9,7 +9,7 @@ own engine, We plan on crediting YCE for inspiring us to make a better version o
 ## What will this Engine be exactly?
 I'm not sure, but Yoshman29 inspired me to continue FNF modding, and now that he is officially leaving the FNF community, I would like to continue something he didn't want to.
 
-This engine will take what YCE gave to modders, and add upon it, maybe even adding more. The [toAdd](https://github.com/ItsLJcool/YoshiCrafterEngine-LJ-Optimized/tree/main/toAdd) folder will be used for features we plan on adding, suggestions we make public (and my crazy ideas lmao) to stand out for FNF Engines.
+This engine will take what YCE gave to modders, and add upon it, maybe even adding more. The [toAdd](https://github.com/ItsLJcool/LJ-Engine/tree/main/toAdd) folder will be used for features we plan on adding, suggestions we make public (and my crazy ideas lmao) to stand out for FNF Engines.
 
 ## Why not continue as "YCE-Opt"?
 For starters, YCE is terrably coded. Even Yoshi admits that, thats also why he wanted to make "Codename Engine". To let YCE die and to improve his mistakes. I was so into how YCE functioned that I basically know 90% of that mess of code (ex: Where code is located and how it functions, etc) and figured out cool stuff you can do with Softcoding.
