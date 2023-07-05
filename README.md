@@ -1,4 +1,4 @@
-<div align="center">
+<!-- <div align="center"> -->
   
 ~~YoshiCrafterEngine-LJ-Optimized~~
 # LJ Engine (Placeholder Name)
