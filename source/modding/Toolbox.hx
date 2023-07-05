@@ -30,6 +30,7 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
             var mod:ModCard = new ModCard(modName);
             mod.x = 35 + (FlxG.width/3 - 35)*(i%3);
             mod.y = 15 + (FlxG.height/3 - 15)*Math.floor(i/3);
+            mod.ID = i;
             modCards.add(mod);
         }
     }
