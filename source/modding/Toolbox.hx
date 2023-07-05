@@ -24,10 +24,12 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
         add(bg);
         modCards = new FlxTypedGroup<ModCard>();
 		add(modCards);
-
+        mods = ["Test 1", "Test 2", "Test 3", "Test 4", "Test 1", "Test 2", "Test 3", "Test 4"];
         for (i in 0...mods.length) {
             var modName = mods[i];
             var mod:ModCard = new ModCard();
+            mod.x = 35 + (mod.spr.width + 50)*(i%3);
+            mod.y = 15 + (mod.spr.height + 50)*Math.floor(i/3);
             modCards.add(mod);
         }
     }
@@ -66,8 +68,9 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         icon.setPosition(spr.x - icon.width/2, spr.y - icon.height/2);
         add(icon);
 
-        title = new FlxText(0,0,spr.width/2, "Placeholder Text", 12);
+        title = new FlxText(0,0,spr.width/2, "Placeholder Text", 15);
         title.alignment = "center";
+        title.font = Paths.font("sans extra bold.ttf");
         title.updateHitbox();
         title.setPosition(spr.x + title.width/2, spr.y + 5);
         add(title);
