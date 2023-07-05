@@ -45,6 +45,7 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="hscript-improved"/>
 	<haxelib name="flixel-ui" />
+	<haxelib name="tjson" />
 	
 	<haxedef name="hscriptPos"/>
 
