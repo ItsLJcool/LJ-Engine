@@ -5,7 +5,7 @@ import openfl.utils.Assets as OpenFlAssets;
 
 class Mem {
 	public static function clear() {
-		Assets.cache.clear();
+		Assets._cache.clear();
 		LimeAssets.cache.clear();
 		OpenFlAssets.cache.clear();
 		FlxG.bitmap.dumpCache();

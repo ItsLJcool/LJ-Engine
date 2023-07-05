@@ -91,7 +91,7 @@ class Paths {
 
 	public static function getCharacter(char:String) {
 		var suffixes:Array<String> = [".xml", ".txt"];
-		var assetTypes:Array<assets.AssetType> = [SPARROW, PACKER];
+		var assetTypes:Array<assets.AssetsType> = [SPARROW, PACKER];
 
 		for (i => suffix in suffixes) {
 			if (FileSystem.exists(getPath('characters/$char/spritesheet$suffix')))

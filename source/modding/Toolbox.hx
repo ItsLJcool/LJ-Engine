@@ -27,9 +27,9 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
         mods = ["Test 1", "Test 2", "Test 3", "Test 4", "Test 1", "Test 2", "Test 3", "Test 4"];
         for (i in 0...mods.length) {
             var modName = mods[i];
-            var mod:ModCard = new ModCard();
-            mod.x = 35 + (mod.spr.width + 50)*(i%3);
-            mod.y = 15 + (mod.spr.height + 50)*Math.floor(i/3);
+            var mod:ModCard = new ModCard(modName);
+            mod.x = 35 + (FlxG.width/3 - 35)*(i%3);
+            mod.y = 15 + (FlxG.height/3 - 15)*Math.floor(i/3);
             modCards.add(mod);
         }
     }
@@ -38,10 +38,10 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
     override function update(elapsed:Float) {
         super.update(elapsed);
         sineTimer += elapsed;
-        // modCards.forEach(function(mod) {
-        //     var cardScale = FlxMath.lerp(1, 1.5, Math.sin(sineTimer));
-        //     mod.scale.set(cardScale, cardScale);
-        // });
+        modCards.forEach(function(mod) {
+            var cardScale = FlxMath.lerp(1, 1.5, Math.sin(sineTimer));
+            mod.scale.set(cardScale, cardScale);
+        });
     }
 }
 
@@ -52,7 +52,7 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
 
     private var spriteScales:Array<FlxPoint> = [];
 
-    override public function new() {
+    override public function new(titleName:String) {
         super();
         spr = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image("menus/modCardBG")));
         spr.scale.set(0.25,0.25);
@@ -68,11 +68,11 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         icon.setPosition(spr.x - icon.width/2, spr.y - icon.height/2);
         add(icon);
 
-        title = new FlxText(0,0,spr.width/2, "Placeholder Text", 15);
+        title = new FlxText(0,0,spr.width/2, titleName, 15);
         title.alignment = "center";
         title.font = Paths.font("sans extra bold.ttf");
         title.updateHitbox();
-        title.setPosition(spr.x + title.width/2, spr.y + 5);
+        title.setPosition(spr.x + spr.width/2 - title.width/2, spr.y + 5);
         add(title);
 
         spriteScales.push(spr.scale.clone());
@@ -87,7 +87,7 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
     }
     function onScale(point:FlxPoint) {
         spr.scale.set(point.x*0.25, point.y*0.25);
-        spr.updateHitbox();
+        // spr.updateHitbox();
 
         icon.setGraphicSize(Math.floor(280*spr.scale.x),Math.floor(280*spr.scale.y));
         icon.scale.set(Math.min(icon.scale.x, icon.scale.y), Math.min(icon.scale.x, icon.scale.y)); // Thanks math :dies of horrable math death:
@@ -95,7 +95,8 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         icon.setPosition(spr.x - icon.width/2, spr.y - icon.height/2);
 
         title.scale.set(point.x, point.y);
-        title.fieldWidth = spr.width/2;
         title.updateHitbox();
+        title.fieldWidth = spr.width/2;
+        title.setPosition(spr.x + spr.width/2 - title.width/2, spr.y + 5);
     }
 }
