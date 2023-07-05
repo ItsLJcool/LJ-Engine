@@ -38,10 +38,10 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
     override function update(elapsed:Float) {
         super.update(elapsed);
         sineTimer += elapsed;
-        modCards.forEach(function(mod) {
-            var cardScale = FlxMath.lerp(1, 1.5, Math.sin(sineTimer));
-            mod.scale.set(cardScale, cardScale);
-        });
+        // modCards.forEach(function(mod) {
+        //     var cardScale = FlxMath.lerp(1, 1.5, Math.sin(sineTimer));
+        //     mod.scale.set(cardScale, cardScale);
+        // });
     }
 }
 
