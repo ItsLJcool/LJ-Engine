@@ -1,7 +1,5 @@
 package game;
 
-import haxe.Json;
-
 typedef SwagSong = {
     var events:Array<SongEvent>;
 	var song:String;

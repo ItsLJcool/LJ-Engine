@@ -12,8 +12,13 @@ using StringTools;
 
 class Assets {
 	public static var _cache:AssetCache = new AssetCache();
+
 	public static function load(type:AssetsType, path:String):Dynamic {
 		path = FileSystem.absolutePath(path);
+
+		if (_cache.hasAsset(path))
+			return _cache.getAsset(path);
+
 		if (!FileSystem.exists(path) && type != IMAGE) {
 			trace('FILE NOT FOUND: ${path} RETURNING');
 			return null;

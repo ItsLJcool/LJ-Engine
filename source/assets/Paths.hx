@@ -1,7 +1,5 @@
 package assets;
 
-import haxe.Json;
-
 class Paths {
 	public static var CURRENT_MOD = "Template Mod";
 

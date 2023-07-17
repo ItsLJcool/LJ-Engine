@@ -8,7 +8,6 @@ import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxShader;
 import flixel.util.FlxColor;
-import haxe.Json;
 
 using StringTools;
 
