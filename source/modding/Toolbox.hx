@@ -35,14 +35,8 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
         }
     }
 
-    var sineTimer:Float = 0.0;
     override function update(elapsed:Float) {
         super.update(elapsed);
-        sineTimer += elapsed;
-        // modCards.forEach(function(mod) {
-        //     var cardScale = FlxMath.lerp(1, 1.5, Math.sin(sineTimer));
-        //     mod.scale.set(cardScale, cardScale);
-        // });
     }
 }
 
@@ -88,7 +82,7 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
     }
     function onScale(point:FlxPoint) {
         spr.scale.set(point.x*0.25, point.y*0.25);
-        // spr.updateHitbox();
+        spr.updateHitbox();
 
         icon.setGraphicSize(Math.floor(280*spr.scale.x),Math.floor(280*spr.scale.y));
         icon.scale.set(Math.min(icon.scale.x, icon.scale.y), Math.min(icon.scale.x, icon.scale.y)); // Thanks math :dies of horrable math death:

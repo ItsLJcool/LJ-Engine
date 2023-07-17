@@ -36,8 +36,8 @@ class Overlay extends Sprite {
 		info.defaultTextFormat = new TextFormat(Paths.font("sans extra bold.ttf"), 24);
 		info.text = 'Alpha Debug Tools:'
 		+ '\nF1: menus.TitleState'
-		+ '\nF5: Closes Debug Tools'
-		+ '\nF6: modding.Toolbox.ToolboxMain';
+		+ '\nF6: Closes Debug Tools'
+		+ '\nF7: modding.Toolbox.ToolboxMain';
 		info.y = title.y + title.height;
 		info.x += 15;
 		addChild(info);
@@ -53,9 +53,7 @@ class Overlay extends Sprite {
 					toggleOverlay();
 				case Keyboard.F7:
 					if (visible)
-						LoadingState.loadAndSwitchState(new modding.Toolbox.ToolboxMain(),
-						false, ["images/debug", "images/menus"]);
-						// FlxG.switchState(new modding.Toolbox.ToolboxMain());
+						FlxG.switchState(new modding.Toolbox.ToolboxMain());
 			}
 		});
 	}
