@@ -1,4 +1,4 @@
-package engine.utills;
+package assets;
 
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFlAssets;

@@ -31,6 +31,7 @@ class Main extends Sprite {
 		addChild(new debug.Overlay());
 		FlxG.fixedTimestep = false;
 
+		FlxG.signals.preStateSwitch.add(Mem.clear);
 		FlxG.signals.preUpdate.add(Conductor.update);
 	}
 }
