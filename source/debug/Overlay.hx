@@ -53,7 +53,9 @@ class Overlay extends Sprite {
 					toggleOverlay();
 				case Keyboard.F7:
 					if (visible)
-						FlxG.switchState(new modding.Toolbox.ToolboxMain());
+						LoadingState.loadAndSwitchState(new modding.Toolbox.ToolboxMain(),
+						false, ["images/debug", "images/menus"]);
+						// FlxG.switchState(new modding.Toolbox.ToolboxMain());
 			}
 		});
 	}
