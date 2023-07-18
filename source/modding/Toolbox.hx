@@ -24,7 +24,7 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
         add(bg);
         modCards = new FlxTypedGroup<ModCard>();
 		add(modCards);
-        mods = ["Test 1", "Test 2", "Test 3", "Test 4", "Test 1", "Test 2", "Test 3", "Test 4"];
+        mods = ["Test 1", "Test 2", "Test 3", "Test 1", "Test 2", "Test 3",];
         for (i in 0...mods.length) {
             var modName = mods[i];
             var mod:ModCard = new ModCard(modName);
@@ -80,18 +80,35 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
             callbackScale._setXYCallback = callbackScale._setXCallback;
         }
     }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        if (!FlxG.mouse.enabled || (!spr.visible || spr.alpha < 0.05)) return;
+        var scaling = (FlxG.mouse.overlaps(spr)) ? 1.15 : 1;
+        scale.set(
+            FlxMath.lerp(scale.x, scaling, elapsed*5),
+            FlxMath.lerp(scale.y, scaling, elapsed*5)
+        );
+    }
+
+
     function onScale(point:FlxPoint) {
         spr.scale.set(point.x*0.25, point.y*0.25);
-        spr.updateHitbox();
+        // spr.updateHitbox();
 
+        var sprWidth = (spr.frameWidth * spr.scale.x);
+        var sprHeight = (spr.frameHeight * spr.scale.y);
+        var sprX = spr.x - (sprWidth - spr.width) * 0.5;
+        var sprY = spr.y - (sprHeight - spr.height) * 0.5;
+        
         icon.setGraphicSize(Math.floor(280*spr.scale.x),Math.floor(280*spr.scale.y));
         icon.scale.set(Math.min(icon.scale.x, icon.scale.y), Math.min(icon.scale.x, icon.scale.y)); // Thanks math :dies of horrable math death:
         icon.updateHitbox();
-        icon.setPosition(spr.x - icon.width/2, spr.y - icon.height/2);
+        icon.setPosition(sprX - icon.width/2, sprY - icon.height/2);
 
         title.scale.set(point.x, point.y);
         title.updateHitbox();
         title.fieldWidth = spr.width/2;
-        title.setPosition(spr.x + spr.width/2 - title.width/2, spr.y + 5);
+        title.setPosition(sprX + sprWidth/2 - title.width/2, sprY + 5);
     }
 }
