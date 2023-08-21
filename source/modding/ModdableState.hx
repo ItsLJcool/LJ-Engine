@@ -30,6 +30,7 @@ class ModdableState extends MusicBeatState {
                 classScript.set("overrideState", overrideState);
             }
         }
+        if (!overrideState) normalCreate();
     }
 
     public override function update(elapsed:Float) {
