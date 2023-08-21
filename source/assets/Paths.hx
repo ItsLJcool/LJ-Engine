@@ -40,10 +40,7 @@ class Paths {
 	}
 
 	public inline static function getSparrowAtlas(path:String, ?useImagesFolder:Bool = true) {
-		return Assets.load(
-			SPARROW,
-			((useImagesFolder) ? image(path) : getPath('$path.png'))
-		);
+		return Assets.load(SPARROW, image(path));
 	}
 
 	public inline static function sound(path:String):String {

@@ -5,3 +5,4 @@ import lime.app.Application;
 import openfl.display.Sprite;
 import sys.FileSystem;
 import tjson.TJSON as Json;
+using StringTools;

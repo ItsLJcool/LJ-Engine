@@ -36,6 +36,7 @@ class Overlay extends Sprite {
 		info.defaultTextFormat = new TextFormat(Paths.font("sans extra bold.ttf"), 24);
 		info.text = 'Alpha Debug Tools:'
 		+ '\nF1: menus.TitleState'
+		+ '\nF2: menus.MainMenuState'
 		+ '\nF6: Closes Debug Tools'
 		+ '\nF7: modding.Toolbox.ToolboxMain';
 		info.y = title.y + title.height;
@@ -46,14 +47,18 @@ class Overlay extends Sprite {
 		toggleOverlay();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, function(e:KeyboardEvent) {
 			switch (e.keyCode) {
-				case Keyboard.F1:
-					if (visible)
-						FlxG.switchState(new menus.TitleState());
 				case Keyboard.F6:
 					toggleOverlay();
-				case Keyboard.F7:
-					if (visible)
+			}
+			if (visible) {
+				switch(e.keyCode) {
+					case Keyboard.F7:
 						FlxG.switchState(new modding.Toolbox.ToolboxMain());
+					case Keyboard.F1:
+						FlxG.switchState(new menus.TitleState());
+					case Keyboard.F2:
+						FlxG.switchState(new menus.MainMenuState());
+				}
 			}
 		});
 	}
