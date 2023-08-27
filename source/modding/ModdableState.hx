@@ -25,9 +25,7 @@ class ModdableState extends MusicBeatState {
             classScript = new HScript(path);
             if (classScript.scriptFailed) classScript.destroy(); 
             else {
-                classScript.parent = this;
                 classScript.call("create");
-                classScript.set("overrideState", overrideState);
             }
         }
         if (!overrideState) normalCreate();

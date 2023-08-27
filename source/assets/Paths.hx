@@ -1,4 +1,5 @@
 package assets;
+import flixel.graphics.FlxGraphic;
 
 class Paths {
 	public static var CURRENT_MOD = "Template Mod";
@@ -35,7 +36,7 @@ class Paths {
 		return getPath('fonts/$path');
 	}
 
-	public inline static function loadImage(path:String):String {
+	public inline static function loadImage(path:String):FlxGraphic {
 		return Assets.load(IMAGE, image(path));
 	}
 
@@ -86,7 +87,7 @@ class Paths {
 
 	public static function getCharacter(char:String) {
 		var suffixes:Array<String> = [".xml", ".txt"];
-		var assetTypes:Array<assets.AssetsType> = [SPARROW, PACKER];
+		var assetTypes:Array<assets.Assets.AssetsType> = [SPARROW, PACKER];
 
 		for (i => suffix in suffixes) {
 			if (FileSystem.exists(getPath('characters/$char/spritesheet$suffix')))

@@ -6,7 +6,7 @@ import hscript.Expr.Error;
 import hscript.*;
 
 class HScript implements scripts.ScriptInterface {
-    public static var classes:Map<String, Class<Dynamic>> = [
+    public static var classes:Map<String, Dynamic> = [
         "Math" => Math,
         "Std" => Std,
 
@@ -43,13 +43,13 @@ class HScript implements scripts.ScriptInterface {
 
     public var filePath:String;
 
-    public function new(path:String) {
-        if (parser == null)
-            initParser();
+    public function new(path:String, ?daParent:Dynamic) {
+        if (parser == null) initParser();
 
         filePath = path;
 
         interp = new Interp();
+        parent = (daParent == null) ? FlxG.state : daParent;
 
         if (FlxG.state is MusicBeatState)
             interp.publicVariables = cast (FlxG.state, MusicBeatState).publicVars;
@@ -77,7 +77,7 @@ class HScript implements scripts.ScriptInterface {
 
     function hscriptTrace(v:Dynamic) {
         var posInfos = interp.posInfos();
-        Sys.println(posInfos.fileName + ":" + posInfos.lineNumber + ": " + Std.string(v));
+        Sys.println(posInfos.fileName.substring(posInfos.fileName.indexOf("assets"), posInfos.fileName.length) + ":" + posInfos.lineNumber + ": " + Std.string(v));
     }
 
     function traceError(e:Error) {
