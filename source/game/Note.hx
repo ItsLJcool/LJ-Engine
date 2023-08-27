@@ -125,6 +125,7 @@ enum NoteScrollType {
 	}
 
 	override public function draw() {
+		if (frame == null) return;
 		noteShader.frameY.value = [frame.frame.top];
 		noteShader.yClip.value = [yClip];
 		noteShader.noteColor.value[0] = noteColor.redFloat;
@@ -142,9 +143,8 @@ enum NoteScrollType {
 			scale.y *= scaleYMult;
 			y = ogY;
 		}
-		else
-			super.draw();
+		else super.draw();
 
-		noteShader.invert.value = [false];
+		// noteShader.invert.value = [false];
 	}
 }

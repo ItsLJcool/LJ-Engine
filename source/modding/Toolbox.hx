@@ -1,6 +1,6 @@
 package modding;
 
-// Note: REDO TOOLBOX!!
+// Note: REDO TOOLBOX!! // note: nvm maybe
 
 import flixel.text.FlxText;
 import flixel.math.FlxPoint;
@@ -20,7 +20,7 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
     var modCards:FlxTypedGroup<ModCard>;
     override function create() {
         super.create();
-        bg = new FlxBackdrop(Assets.load(IMAGE, Paths.image("debug/backdropGrid")), FlxAxes.XY, 0,0);
+        bg = new FlxBackdrop(Paths.loadImage("debug/backdropGrid"), FlxAxes.XY, 0,0);
 		bg.velocity.set(-65, -65);
         bg.alpha = 0.75;
         add(bg);
@@ -51,12 +51,12 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
 
     override public function new(titleName:String) {
         super();
-        spr = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image("menus/modCardBG")));
+        spr = new FlxSprite().loadGraphic(Paths.loadImage("menus/modCardBG"));
         spr.scale.set(0.25,0.25);
         spr.updateHitbox();
         add(spr);
 
-        icon = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image("icon")));
+        icon = new FlxSprite().loadGraphic(Paths.loadImage("icon"));
         icon.setGraphicSize(Math.floor(280*spr.scale.x),Math.floor(280*spr.scale.y));
         icon.scale.set(Math.min(icon.scale.x, icon.scale.y), Math.min(icon.scale.x, icon.scale.y)); // Thanks math :dies of horrable math death:
         icon.updateHitbox();
