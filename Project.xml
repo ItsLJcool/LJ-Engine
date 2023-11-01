@@ -46,6 +46,8 @@
 	<haxelib name="hscript-improved"/>
 	<haxelib name="flixel-ui" />
 	<haxelib name="tjson" />
+	<!-- Using this because it has button URLS. use " https://github.com/ThatOneIdiotXav/discord_rpc_yce " if you want to `git install`, thanks again Xav -->
+	<haxelib name="discord_rpc_yce" if="desktop"/>
 	
 	<haxedef name="hscriptPos"/>
 

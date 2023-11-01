@@ -5,7 +5,7 @@ class Paths {
 	public static var CURRENT_MOD = "Template Mod";
 
 	public static function getPath(path:String, forceAssets:Bool = false):String {
-			if (!forceAssets) {
+		if (!forceAssets) {
 			var daPath = FileSystem.absolutePath('mods/$CURRENT_MOD/$path');
 			if (FileSystem.exists(daPath))
 				return daPath;
@@ -39,9 +39,12 @@ class Paths {
 	public inline static function loadImage(path:String):FlxGraphic {
 		return Assets.load(IMAGE, image(path));
 	}
-
+	/**
+		@param path This is the Path of the `Image` and `XML` data, usually in this format: `Paths.getSparrowAtlas("icon");` This returns the Icon in `asset/images/icon.png`.
+		@param useImagesFolder (Not needed) Allows you to dispand 
+	**/
 	public inline static function getSparrowAtlas(path:String, ?useImagesFolder:Bool = true) {
-		return Assets.load(SPARROW, image(path));
+		return Assets.load(SPARROW, (useImagesFolder) ? image(path) : getPath('$path.png'));
 	}
 
 	public inline static function sound(path:String):String {
