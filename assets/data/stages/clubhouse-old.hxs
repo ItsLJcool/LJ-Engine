@@ -1,0 +1,14 @@
+function create() {
+    var bg:FlxSprite = new FlxSprite(-750, -150, Assets.load("IMAGE", Paths.image("stages/funny/Clubhouse-oldextended")));
+    bg.scrollFactor.set(1, 1);
+    add(bg);
+
+    PlayState.boyfriend.x = 1270;
+    PlayState.boyfriend.y = 80;
+
+    PlayState.gf.x = 650;
+    PlayState.gf.y = 80;
+
+    PlayState.dad.x = 200;
+    PlayState.dad.y = 80;
+}

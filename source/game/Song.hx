@@ -44,7 +44,7 @@ typedef SwagSection = {
 
 class SongParser {
     public static function parseSongJson(diff:String, song:String) {
-        var jsonContent:String = Assets.load(TEXT, Paths.json('songs/$song/diffs/$diff'));
+        var jsonContent:String = Assets.load(TEXT, Paths.json('songs/welcome-old/diffs/welcome-old'));
         jsonContent = jsonContent.substr(0, jsonContent.lastIndexOf("}") + 1);
 
         var parsedJson = Json.parse(jsonContent).song;

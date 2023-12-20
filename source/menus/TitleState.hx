@@ -54,32 +54,6 @@ class TitleState extends backend.MusicBeat.MusicBeatState {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
-		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-		if (gamepad != null) {
-			if (gamepad.justPressed.START)
-				pressedEnter = true;
-
-			#if switch
-			if (gamepad.justPressed.B)
-				pressedEnter = true;
-			#end
-		}
-
-		#if mobile
-		for (touch in FlxG.touches.list) {
-			if (touch.justPressed) {
-				pressedEnter = true;
-			}
-		}
-		#end
-		if (pressedEnter) {
-			enter.animation.play('press');
-			var tmr = new FlxTimer().start(1.75, function(tmr:FlxTimer) {
-				FlxG.switchState(new game.PlayState());
-			});
-		}
-
-		function skipTitle() {}
+		FlxG.switchState(new game.PlayState());
 	}
 }
