@@ -42,7 +42,7 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
     }
 }
 
-class ModCard {
+class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
     public var spr:FlxSprite;
     public var icon:FlxSprite;
     public var title:FlxText;
