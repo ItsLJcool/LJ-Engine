@@ -9,6 +9,8 @@ import flixel.util.FlxAxes;
 import flixel.addons.display.FlxBackdrop;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import flixel.util.FlxTimer;
+import flixel.util.FlxSort;
 
 class ToolboxMain extends backend.MusicBeat.MusicBeatState {
     override public function new() {
@@ -24,9 +26,10 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
 		bg.velocity.set(-65, -65);
         bg.alpha = 0.75;
         add(bg);
+
         modCards = new FlxTypedGroup<ModCard>();
 		add(modCards);
-        mods = ["Test 1", "Test 2", "Test 3", "Test 1", "Test 2", "Test 3",];
+        mods = ["Test 1", "Test 2", "Test 3", "Test 4", "Test 5", "Test 6",];
         for (i in 0...mods.length) {
             var modName = mods[i];
             var mod:ModCard = new ModCard(modName);
@@ -35,17 +38,42 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
             mod.ID = i;
             modCards.add(mod);
         }
+        ModCard.staredFunc = staredItem;
+    }
+
+    function staredItem() {
+        // this is here bc apparently when editing the array it calls the update function in FlxTypedSpriteGroup (????)
+        new FlxTimer().start(0.0001, function(tmr) {
+            modCards.members.sort((a, b) -> {
+                if (a.starred == b.starred) return Std.int(a.ID - b.ID);
+                if (a.starred) return -1;
+                if (b.starred) return 1;
+
+               return 0;
+            });
+        });
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+
+        for (i in 0...modCards.members.length) {
+            var mod = modCards.members[i];
+            mod.setPosition(
+                FlxMath.lerp(mod.x, 35 + (FlxG.width/3 - 35)*(i%3), elapsed*8),
+                FlxMath.lerp(mod.y, 15 + (FlxG.height/3 - 15)*Math.floor(i/3), elapsed*8)
+            );
+        }
     }
 }
 
 class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
+    public static var staredFunc:Dynamic;
+    public var starred:Bool = false;
     public var spr:FlxSprite;
     public var icon:FlxSprite;
     public var title:FlxText;
+    public var star:FlxSprite;
 
     private var spriteScales:Array<FlxPoint> = [];
 
@@ -57,7 +85,7 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         add(spr);
 
         icon = new FlxSprite().loadGraphic(Paths.loadImage("icon"));
-        icon.setGraphicSize(Math.floor(280*spr.scale.x),Math.floor(280*spr.scale.y));
+        icon.setGraphicSize(Math.floor(280*spr.scale.x), Math.floor(280*spr.scale.y));
         icon.scale.set(Math.min(icon.scale.x, icon.scale.y), Math.min(icon.scale.x, icon.scale.y)); // Thanks math :dies of horrable math death:
         icon.updateHitbox();
         icon.setPosition(spr.x - icon.width/2, spr.y - icon.height/2);
@@ -71,16 +99,36 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         title.updateHitbox();
         title.setPosition(spr.x + spr.width/2 - title.width/2, spr.y + 5);
         add(title);
+        
+        star = new FlxSprite();
+        star.frames = Paths.getSparrowAtlas("niceStar");
+        star.animation.addByPrefix("normal", "star normal", 1, false);
+        star.animation.addByPrefix("stared", "star selected", 8, true);
+        star.animation.play("normal", true);
+        var starScale = (!starred) ? 150 : 225;
+        star.setGraphicSize(Math.floor(starScale*star.scale.x), Math.floor(starScale*star.scale.y));
+        star.scale.set(Math.min(star.scale.x, star.scale.y), Math.min(star.scale.x, star.scale.y));
+        star.updateHitbox();
+        star.setPosition(spr.x + spr.width - star.width/2, spr.y - star.height/2);
+        star.color = 0xFFFFFFFF;
+        add(star);
 
         spriteScales.push(spr.scale.clone());
         spriteScales.push(icon.scale.clone());
         spriteScales.push(title.scale.clone());
+        spriteScales.push(star.scale.clone());
         @:privateAccess {
             var callbackScale:FlxCallbackPoint = cast(scale);
             callbackScale._setXCallback = onScale;
             callbackScale._setYCallback = callbackScale._setXCallback;
             callbackScale._setXYCallback = callbackScale._setXCallback;
         }
+    }
+
+    function toggleStar() {
+        starred = !starred;
+        star.animation.play((starred) ? "stared" : "normal", true);
+        staredFunc();
     }
 
     override function update(elapsed:Float) {
@@ -91,6 +139,7 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
             FlxMath.lerp(scale.x, scaling, elapsed*5),
             FlxMath.lerp(scale.y, scaling, elapsed*5)
         );
+        if (FlxG.mouse.overlaps(star) && FlxG.mouse.justReleased) toggleStar();
     }
 
 
@@ -110,7 +159,13 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
 
         title.scale.set(point.x, point.y);
         title.updateHitbox();
-        title.fieldWidth = spr.width/2;
+        title.fieldWidth = sprWidth/2;
         title.setPosition(sprX + sprWidth/2 - title.width/2, sprY + 5);
+        
+        var starScale = (!starred) ? 150 : 225;
+        star.setGraphicSize(Math.floor(starScale*spr.scale.x), Math.floor(starScale*spr.scale.y));
+        star.scale.set(Math.min(star.scale.x, star.scale.y), Math.min(star.scale.x, star.scale.y));
+        star.updateHitbox();
+        star.setPosition(sprX + sprWidth - star.width/2,sprY - star.height/2);
     }
 }

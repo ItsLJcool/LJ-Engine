@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="niceStar.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="star normal0000" x="293" y="3" width="113" height="108"/>
+	<SubTexture name="star selected0000" x="3" y="3" width="144" height="123" frameX="-2" frameY="0" frameWidth="146" frameHeight="123"/>
+	<SubTexture name="star selected0001" x="150" y="3" width="140" height="116" frameX="0" frameY="-7" frameWidth="146" frameHeight="123"/>
+</TextureAtlas>
