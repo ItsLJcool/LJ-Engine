@@ -2,7 +2,7 @@ package assets;
 import flixel.graphics.FlxGraphic;
 
 class Paths {
-	public static var CURRENT_MOD = "Template Mod";
+	public static var CURRENT_MOD:String = "Template Mod";
 
 	public static function getPath(path:String, forceAssets:Bool = false):String {
 		if (!forceAssets) {

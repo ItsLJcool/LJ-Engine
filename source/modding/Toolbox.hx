@@ -33,15 +33,16 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
         for (i in 0...mods.length) {
             var modName = mods[i];
             var mod:ModCard = new ModCard(modName);
-            mod.x = 35 + (FlxG.width/3 - 35)*(i%3);
-            mod.y = 15 + (FlxG.height/3 - 15)*Math.floor(i/3);
+            mod.x = ModCard.cardDist.x(i);
+            mod.y = ModCard.cardDist.y(i);
             mod.ID = i;
             modCards.add(mod);
         }
         ModCard.staredFunc = staredItem;
     }
 
-    function staredItem() {
+    var killMe:Dynamic;
+    function staredItem(modCard) {
         // this is here bc apparently when editing the array it calls the update function in FlxTypedSpriteGroup (????)
         new FlxTimer().start(0.0001, function(tmr) {
             modCards.members.sort((a, b) -> {
@@ -58,10 +59,11 @@ class ToolboxMain extends backend.MusicBeat.MusicBeatState {
         super.update(elapsed);
 
         for (i in 0...modCards.members.length) {
-            var mod = modCards.members[i];
-            mod.setPosition(
-                FlxMath.lerp(mod.x, 35 + (FlxG.width/3 - 35)*(i%3), elapsed*8),
-                FlxMath.lerp(mod.y, 15 + (FlxG.height/3 - 15)*Math.floor(i/3), elapsed*8)
+            var card = modCards.members[i];
+            var point:FlxPoint = new FlxPoint(ModCard.cardDist.x(i), ModCard.cardDist.y(i));
+            card.setPosition(
+                FlxMath.lerp(card.x, point.x, elapsed*8),
+                FlxMath.lerp(card.y, point.y, elapsed*8)
             );
         }
     }
@@ -71,7 +73,11 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
     public static var staredFunc:Dynamic;
     public var starred:Bool = false;
     public var spr:FlxSprite;
+    static public var cardDist:CardDistance = new CardDistance();
+
     public var icon:FlxSprite;
+    public var iconPath:String = "icon";
+
     public var title:FlxText;
     public var star:FlxSprite;
 
@@ -84,7 +90,7 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         spr.updateHitbox();
         add(spr);
 
-        icon = new FlxSprite().loadGraphic(Paths.loadImage("icon"));
+        icon = new FlxSprite().loadGraphic(Paths.loadImage(iconPath));
         icon.setGraphicSize(Math.floor(280*spr.scale.x), Math.floor(280*spr.scale.y));
         icon.scale.set(Math.min(icon.scale.x, icon.scale.y), Math.min(icon.scale.x, icon.scale.y)); // Thanks math :dies of horrable math death:
         icon.updateHitbox();
@@ -125,10 +131,10 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         }
     }
 
-    function toggleStar() {
-        starred = !starred;
+    function toggleStar(?force:Bool) {
+        starred = (force != null) ? force : !starred;
         star.animation.play((starred) ? "stared" : "normal", true);
-        staredFunc();
+        staredFunc(this);
     }
 
     override function update(elapsed:Float) {
@@ -168,4 +174,15 @@ class ModCard extends FlxTypedSpriteGroup<FlxSprite> {
         star.updateHitbox();
         star.setPosition(sprX + sprWidth - star.width/2,sprY - star.height/2);
     }
+}
+
+class CardDistance {
+    public dynamic function x(i:Int) {
+        return 35 + (FlxG.width/3 - 35)*(i%3);
+    }
+    public dynamic function y(i:Int) {
+        return 15 + (FlxG.height/3 - 15)*Math.floor(i/3);
+    }
+
+    public function new() {}
 }

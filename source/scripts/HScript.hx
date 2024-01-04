@@ -21,7 +21,8 @@ class HScript implements scripts.ScriptInterface {
 
         "Paths" => Paths,
         "Assets" => Assets,
-        "Settings" => backend.Settings
+        "Settings" => backend.Settings,
+        "EngineHelper" => tools.EngineHelper,
     ];
     public static var statics:Map<String, Dynamic> = [];
     public static var parser:Parser;
@@ -77,7 +78,7 @@ class HScript implements scripts.ScriptInterface {
 
     function hscriptTrace(v:Dynamic) {
         var posInfos = interp.posInfos();
-        Sys.println(posInfos.fileName.substring(posInfos.fileName.indexOf("assets"), posInfos.fileName.length) + ":" + posInfos.lineNumber + ": " + Std.string(v));
+        Sys.println('${posInfos.fileName.substring(posInfos.fileName.indexOf("assets"), posInfos.fileName.length)}:${posInfos.lineNumber}: ${Std.string(v)}');
     }
 
     function traceError(e:Error) {

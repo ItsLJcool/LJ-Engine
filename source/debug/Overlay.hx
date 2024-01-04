@@ -14,6 +14,15 @@ using StringTools;
 class Overlay extends Sprite {
 	private var title:TextField;
 	private var info:TextField;
+	private var commandline:TextField;
+	@:isVar public var font(get, set):String = "sans extra bold";
+	private function set_font(s:String):String {
+		s = s.replace(".ttf", ""); s = s.replace(".otf", "");
+		return s;
+	}
+	private function get_font():String {
+		return font;
+	}
 
 	public function new() {
 		super();
@@ -21,19 +30,18 @@ class Overlay extends Sprite {
 		title.autoSize = LEFT;
 		title.selectable = false;
 		title.textColor = 0xFFFFFFFF;
-		title.defaultTextFormat = new TextFormat(Paths.font("sans extra bold.ttf"), 16);
+		title.defaultTextFormat = new TextFormat(Paths.font('${font}.ttf'), 16);
 		title.text = 'LJ Engine (PlaceHolder Name) | ${Main.engineVersion}';
 		title.y += 15;
 		title.x += 15;
 		addChild(title);
 
-		
 		info = new TextField();
 		info.autoSize = LEFT;
 		info.selectable = false;
 		info.textColor = 0xFFFFFFFF;
 		info.multiline = true;
-		info.defaultTextFormat = new TextFormat(Paths.font("sans extra bold.ttf"), 24);
+		info.defaultTextFormat = new TextFormat(Paths.font('${font}.ttf'), 24);
 		info.text = 'Alpha Debug Tools:'
 		+ '\nF1: menus.TitleState'
 		+ '\nF2: menus.MainMenuState'
@@ -42,6 +50,14 @@ class Overlay extends Sprite {
 		info.y = title.y + title.height;
 		info.x += 15;
 		addChild(info);
+		
+		// commandline = new TextField();
+        // commandline.selectable = true;
+        // commandline.type = INPUT;
+        // commandline.text = "";
+        // commandline.textColor = 0xFFFFFFFF;
+        // commandline.defaultTextFormat = new TextFormat(Paths.font('${font}.ttf'), 12);
+        // commandline.height = 22;
 
 		visible = true;
 		toggleOverlay();
