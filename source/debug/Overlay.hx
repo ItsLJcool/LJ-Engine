@@ -15,14 +15,10 @@ class Overlay extends Sprite {
 	private var title:TextField;
 	private var info:TextField;
 	private var commandline:TextField;
+	
 	@:isVar public var font(get, set):String = "sans extra bold";
-	private function set_font(s:String):String {
-		s = s.replace(".ttf", ""); s = s.replace(".otf", "");
-		return s;
-	}
-	private function get_font():String {
-		return font;
-	}
+	private function set_font(s:String):String { return s = haxe.io.Path.withoutExtension(s); }
+	private function get_font():String { return font; }
 
 	public function new() {
 		super();

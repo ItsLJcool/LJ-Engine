@@ -2,11 +2,15 @@ package menus;
 
 import backend.MusicBeat.MusicBeatState;
 import flixel.FlxState;
+import flixel.text.FlxText;
+import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.effects.FlxFlicker;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
+import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxColor;
 
 class MainMenuState extends modding.ModdableState {
 
@@ -39,37 +43,42 @@ class MainMenuState extends modding.ModdableState {
         add(menuSprites);
         
         menuShit.add({
-            name: "menus/FNF_main_menu_assets",
-            onSelection: function() {
-                trace("story mode onSelection yay");
-                return false;
-            },
+            name: "story mode",
+            path: "menus/FNF_main_menu_assets",
+            // onSelection: function() {
+            //     trace("story mode onSelection yay");
+            // },
             animated: true,
-            idle: "story mode basic",
-            selected: "story mode white",
             // transitionState: modding.Toolbox.ToolboxMain,
         });
         
         menuShit.add({
-            name: "menus/FNF_main_menu_assets",
+            name: "freeplay",
+            path: "menus/FNF_main_menu_assets",
             onSelection: function() {
                 trace("freeplay test");
-                return false;
             },
-            animated: false,
-            idle: "freeplay basic",
-            selected: "freeplay white",
+            animated: true,
+        });
+        
+        menuShit.add({
+            name: "freeplay",
+            path: "menus/FNF_main_menu_assets",
+            onSelection: function() {
+                trace("freeplay test");
+            },
+            animated: true,
         });
 
         for (i=>item in menuShit.members) {
             trace(item);
             var menuItem:FlxSprite = new FlxSprite(0, (FlxG.height / menuShit.length * i) + (FlxG.height / (menuShit.length * 2)));
             if (item.animated) {
-                menuItem.frames = Paths.getSparrowAtlas(item.name);
+                menuItem.frames = Paths.getSparrowAtlas(item.path);
                 menuItem.animation.addByPrefix('idle', item.idle, item.fps, item.loop);
                 menuItem.animation.addByPrefix('selected', item.selected, item.fps, item.loop);
                 menuItem.animation.play('idle', true);
-            } else menuItem.loadGraphic(Paths.loadImage(item.name));
+            } else menuItem.loadGraphic(Paths.loadImage(item.path));
             menuItem.ID = i;
             menuItem.updateHitbox();
             menuItem.screenCenter(X);
@@ -81,6 +90,7 @@ class MainMenuState extends modding.ModdableState {
         }
         
         canSelect = true;
+        changeItem();
     }
     
     override function normalBeatHit(curBeat) {
@@ -91,31 +101,34 @@ class MainMenuState extends modding.ModdableState {
         });
     }
 
-    public var curSelected:Int = 0;
     override function normalUpdate(elapsed) {
-        if (canSelect && (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER)) {
-            select();
+        if (canSelect) {
+            if (FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.ENTER) select();
+
+            if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.UP) changeItem(-1);
+            else if (FlxG.keys.justPressed.S || FlxG.keys.justPressed.DOWN) changeItem(1);
         }
+        menuSprites.forEach(function(spr) {
+            spr.screenCenter(X);
+        });
     }
 
     function select() {
         canSelect = false;
         var menuItem = menuShit.members[curSelected];
+        var menuSpr = menuSprites.members[curSelected];
         var returnedData = menuItem.onSelection();
-        trace(returnedData);
+        if (menuItem.transitionState == null) {
+            var wow = new MenuError('Error: No Transition for ${menuItem.name}', 30);
+            add(wow);
+        }
         FlxFlicker.flicker(magenta, 1.1, 0.15, false, false, function(flick:FlxFlicker) {
             canSelect = true;
         });
-
         if (menuItem.transitionState == null) return;
         menuSprites.forEach(function(spr:FlxSprite) {
 			if (curSelected != spr.ID) {
-				FlxTween.tween(spr, {alpha: 0}, 0.4, {
-					ease: FlxEase.quadOut,
-					onComplete: function(twn:FlxTween) {
-						spr.kill();
-					}
-				});
+				FlxTween.tween(spr, {alpha: 0}, 0.4, { ease: FlxEase.quadOut, onComplete: function(twn:FlxTween) { spr.kill(); } });
 			}
 			else {
 				FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker) {
@@ -124,10 +137,25 @@ class MainMenuState extends modding.ModdableState {
 			}
 		});
     }
+
+    public var curSelected:Int = 0;
+    function changeItem(?id:Int = 0) {
+        curSelected += id;
+        if (curSelected >= menuShit.length) curSelected = 0;
+		if (curSelected < 0) curSelected = menuShit.length - 1;
+
+        var menuItem = menuShit.members[curSelected];
+
+        menuSprites.forEach(function(item) {
+			item.offset.set(0,0);
+            item.animation.play((item.ID == curSelected) ? "selected" : "idle", true);
+        });
+    }
 }
 
 /**
-    @param name `[String]` The image path, also commonly the name of the item (ex: story mode)
+    @param name `[String]` Name to identify
+    @param path `[String]` The image path
     @param onSelection `[Function]` The function when selecting item
     @param position `[FlxPoint] default: 0,0` x / y position for Sprite
     @param scale `[FlxPoint] default: 1,1` scale.x / scale.y for Sprite
@@ -141,6 +169,7 @@ class MainMenuState extends modding.ModdableState {
 **/
 typedef MenuData = {
     var name:String;
+    var path:String;
     @:optional var onSelection:Dynamic;
     @:optional var position:Null<FlxPoint>;
     @:optional var scale:Null<FlxPoint>;
@@ -209,5 +238,80 @@ class MenuItems {
             return; // just incase
         }
         members.remove(toRemove);
+    }
+}
+
+class MenuError extends FlxSprite {
+    private var daText:FlxText;
+    public static var oneAtTime:Bool = true;
+    public static var curActive:Bool = false;
+	@:isVar public var font(get, set):String = "sans extra bold";
+	private function set_font(s:String):String { return s = haxe.io.Path.withoutExtension(s); }
+	private function get_font():String { return font; }
+
+    public var size:Int = 36;
+    public var text:String;
+
+    override function set_alpha(v:Float):Float { return daText.alpha = super.set_alpha(v); }
+    override function set_visible(v:Bool):Bool { return daText.visible = super.set_visible(v); }
+    override function set_active(v:Bool):Bool { return daText.active = super.set_active(v); }
+    override function set_exists(v:Bool):Bool { return daText.exists = super.set_exists(v); }
+
+    override public function new(?_text:String, ?_size:Int = 36, ?auto:Bool = true) {
+        if (oneAtTime && curActive) return;
+        if (_text != null) text = _text;
+        size = _size;
+        curActive = true;
+        super();
+        
+        makeGraphic(300, Std.int(FlxG.height/2), FlxColor.TRANSPARENT);
+        updateHitbox();
+        screenCenter();
+        FlxSpriteUtil.drawRoundRectComplex(this, 0, 0, width, height, 25, 0, 25, 0, 0x80000000);
+        updateHitbox();
+
+        daText = new FlxText(0, 0, width/2, text, size);
+        daText.alignment = "center";
+        daText.font = Paths.font('${font}.ttf');
+        daText.updateHitbox();
+
+        if (auto) display();
+    }
+
+    override public function update(elapsed):Void {
+        super.update(elapsed);
+        if (daText.exists && daText.active) {
+            daText.update(elapsed);
+            daText.x = x + width/2 - daText.height/2;
+            daText.y = y + height/2 - daText.height/2;
+
+            if (daText.text != text || daText.size != size)  {
+                daText.text = text;
+                daText.size = size;
+                updateHitbox();
+            }
+        }
+    }
+
+    override function destroy() {
+        super.destroy();
+        daText.destroy();
+    }
+
+    override function draw() {
+        super.draw();
+        if (daText.exists) daText.draw();
+    }
+
+    public function display() {
+        x = FlxG.width; y = FlxG.height/2 - height/2;
+
+        FlxTween.tween(this, {x: FlxG.width - width + 5}, 2, {ease: FlxEase.quadInOut, onComplete: function(twn:FlxTween) {
+            FlxTween.tween(this, {x: FlxG.width + 5}, 1, {ease: FlxEase.quadInOut, startDelay: 1.5, onComplete: function(twn:FlxTween) {
+                destroy();
+                curActive = false;
+                FlxG.state.remove(this);
+            }});
+        }});
     }
 }
