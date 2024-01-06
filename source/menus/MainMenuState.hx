@@ -270,7 +270,7 @@ class MenuError extends FlxSprite {
         FlxSpriteUtil.drawRoundRectComplex(this, 0, 0, width, height, 25, 0, 25, 0, 0x80000000);
         updateHitbox();
 
-        daText = new FlxText(0, 0, width/2, text, size);
+        daText = new FlxText(0, 0, width/1.5, text, size);
         daText.alignment = "center";
         daText.font = Paths.font('${font}.ttf');
         daText.updateHitbox();
