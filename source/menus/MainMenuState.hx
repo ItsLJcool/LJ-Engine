@@ -68,6 +68,7 @@ class MainMenuState extends modding.ModdableState {
                 trace("freeplay test");
             },
             animated: true,
+            transitionState: menus.FreeplayState,
         });
 
         for (i=>item in menuShit.members) {
