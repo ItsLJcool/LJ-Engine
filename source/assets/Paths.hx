@@ -65,7 +65,8 @@ class Paths {
 
 	public inline static function parseJson(path:String):String {
 		var json = Assets.load(JSON, json(path));
-		return Json.parse(json);
+		var parsed = Json.parse(json);
+		return parsed;
 	}
 
 	public inline static function txt(path:String):String {
