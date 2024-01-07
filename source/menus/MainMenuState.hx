@@ -11,6 +11,8 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
+import flixel.FlxObject;
 
 class MainMenuState extends modding.ModdableState {
 
@@ -18,24 +20,60 @@ class MainMenuState extends modding.ModdableState {
     public var menuSprites:FlxTypedGroup<FlxSprite>;
     public var canSelect:Bool = false;
 
+    public var camFollow:FlxObject;
+
     var bgSpr:FlxSprite;
     var magenta:FlxSprite;
 
 	public var factor(get, never):Float;
-	private function get_factor() {
-		return Math.min(650 / menuShit.length, 100);
-	}
+	private function get_factor() { return Math.min(650 / menuShit.length, 100); }
+
     override function normalCreate() {
         super.normalCreate();
+
+        menuShit.onAdd = function(data:MenuData) {
+            var menuItem:FlxSprite = new FlxSprite(0, 0);
+            if (data.animated) {
+                menuItem.frames = Paths.getSparrowAtlas(data.path);
+                menuItem.animation.addByPrefix('idle', data.idle, data.fps, data.loop);
+                menuItem.animation.addByPrefix('selected', data.selected, data.fps, data.loop);
+                menuItem.animation.play('idle', true);
+            } else menuItem.loadGraphic(Paths.loadImage(data.path));
+            menuItem.ID = menuShit.length;
+            menuSprites.add(menuItem);
+
+            for (i=>item in menuSprites.members) {
+                item.setPosition(0, (FlxG.height / menuShit.length * i) + (FlxG.height / (menuShit.length * 2)));
+                item.updateHitbox();
+                item.screenCenter(X);
+                item.scrollFactor.set(0, 1 / (menuShit.length));
+                item.scale.set(factor / item.height, factor / item.height);
+                item.y -= item.height / 2;
+                item.antialiasing = true;
+            }
+        }
         
-        bgSpr = new FlxSprite().loadGraphic(Paths.loadImage("menus/backgrounds/menuBG"));
-        bgSpr.setGraphicSize(FlxG.width, FlxG.height);
-        bgSpr.screenCenter();
-        add(bgSpr);
+        camFollow = new FlxObject(0,0, 1, 1);
+		add(camFollow);
         
-        magenta = new FlxSprite().loadGraphic(Paths.loadImage("menus/backgrounds/menuBGMagenta"));
-        magenta.setGraphicSize(FlxG.width, FlxG.height);
-        magenta.screenCenter();
+        FlxG.camera.follow(camFollow, null, 0.06);
+        
+        bgSpr = new FlxSprite(-80).loadGraphic(Paths.loadImage("menus/backgrounds/menuBG"));
+		bgSpr.scrollFactor.x = 0;
+		bgSpr.scrollFactor.y = 0.18;
+		bgSpr.setGraphicSize(Std.int(bgSpr.width * 1.2));
+		bgSpr.updateHitbox();
+		bgSpr.screenCenter();
+		bgSpr.antialiasing = true;
+		add(bgSpr);
+        
+        magenta = new FlxSprite(-80).loadGraphic(Paths.loadImage("menus/backgrounds/menuBGMagenta"));
+		magenta.scrollFactor.x = 0;
+		magenta.scrollFactor.y = 0.18;
+		magenta.setGraphicSize(Std.int(magenta.width * 1.2));
+		magenta.updateHitbox();
+		magenta.screenCenter();
+		magenta.antialiasing = true;
         magenta.visible = false;
         add(magenta);
 
@@ -45,9 +83,9 @@ class MainMenuState extends modding.ModdableState {
         menuShit.add({
             name: "story mode",
             path: "menus/FNF_main_menu_assets",
-            // onSelection: function() {
-            //     trace("story mode onSelection yay");
-            // },
+            onSelection: function() {
+                trace("story mode onSelection yay");
+            },
             animated: true,
             // transitionState: modding.Toolbox.ToolboxMain,
         });
@@ -59,36 +97,8 @@ class MainMenuState extends modding.ModdableState {
                 trace("freeplay test");
             },
             animated: true,
-        });
-        
-        menuShit.add({
-            name: "freeplay",
-            path: "menus/FNF_main_menu_assets",
-            onSelection: function() {
-                trace("freeplay test");
-            },
-            animated: true,
             transitionState: menus.FreeplayState,
         });
-
-        for (i=>item in menuShit.members) {
-            trace(item);
-            var menuItem:FlxSprite = new FlxSprite(0, (FlxG.height / menuShit.length * i) + (FlxG.height / (menuShit.length * 2)));
-            if (item.animated) {
-                menuItem.frames = Paths.getSparrowAtlas(item.path);
-                menuItem.animation.addByPrefix('idle', item.idle, item.fps, item.loop);
-                menuItem.animation.addByPrefix('selected', item.selected, item.fps, item.loop);
-                menuItem.animation.play('idle', true);
-            } else menuItem.loadGraphic(Paths.loadImage(item.path));
-            menuItem.ID = i;
-            menuItem.updateHitbox();
-            menuItem.screenCenter(X);
-            menuItem.scrollFactor.set(0, 1 / (menuShit.length));
-            menuItem.scale.set(factor / menuItem.height, factor / menuItem.height);
-            menuItem.y -= menuItem.height / 2;
-            menuItem.antialiasing = true;
-            menuSprites.add(menuItem);
-        }
         
         canSelect = true;
         changeItem();
@@ -112,6 +122,7 @@ class MainMenuState extends modding.ModdableState {
         menuSprites.forEach(function(spr) {
             spr.screenCenter(X);
         });
+        camFollow.setPosition(FlxG.width / 2, FlxG.mouse.getPositionInCameraView(FlxG.camera).y);
     }
 
     function select() {
@@ -119,7 +130,8 @@ class MainMenuState extends modding.ModdableState {
         var menuItem = menuShit.members[curSelected];
         var menuSpr = menuSprites.members[curSelected];
         var returnedData = menuItem.onSelection();
-        if (menuItem.transitionState == null) {
+    
+        if (menuItem.transitionState == null && (menuItem.onSelection == null || returnedData == false)) {
             var wow = new MenuError('Error: No Transition for ${menuItem.name}', 30);
             add(wow);
         }
@@ -148,8 +160,13 @@ class MainMenuState extends modding.ModdableState {
         var menuItem = menuShit.members[curSelected];
 
         menuSprites.forEach(function(item) {
-			item.offset.set(0,0);
             item.animation.play((item.ID == curSelected) ? "selected" : "idle", true);
+			item.offset.set(0,0);
+            if (item.ID == curSelected) {
+                var midpoint = item.getGraphicMidpoint();
+                camFollow.setPosition(midpoint.x, midpoint.y);
+            }
+			item.updateHitbox();
         });
     }
 }
@@ -188,8 +205,8 @@ class MenuItems {
     public var length(get, null):Int;
     private function get_length() { return members.length; };
 
-    private dynamic function onAdd() {
-        trace("todo");
+    public dynamic function onAdd(data:MenuData) {
+        trace("Not overrided");
     }
 
     private static dynamic function menuDataNull(data:MenuData) {
@@ -216,14 +233,14 @@ class MenuItems {
 
     public function add(data:MenuData) {
         data = menuDataNull(data);
+        onAdd(data);
         members.push(data);
-        onAdd();
     }
 
     public function insert(index:Int, data:MenuData) {
         data = menuDataNull(data);
+        onAdd(data);
         members.insert(index, data);
-        onAdd();
     }
 
     public function remove(name:String) {
@@ -234,10 +251,7 @@ class MenuItems {
                 break;
             }
         }
-        if (toRemove == null) {
-            throw "Unable to remove item, doesn't exist";
-            return; // just incase
-        }
+        if (toRemove == null) throw "Unable to remove item, doesn't exist";
         members.remove(toRemove);
     }
 }
@@ -246,6 +260,7 @@ class MenuError extends FlxSprite {
     private var daText:FlxText;
     public static var oneAtTime:Bool = true;
     public static var curActive:Bool = false;
+    private function get_curActive() { return curActive; };
 	@:isVar public var font(get, set):String = "sans extra bold";
 	private function set_font(s:String):String { return s = haxe.io.Path.withoutExtension(s); }
 	private function get_font():String { return font; }
@@ -275,6 +290,8 @@ class MenuError extends FlxSprite {
         daText.alignment = "center";
         daText.font = Paths.font('${font}.ttf');
         daText.updateHitbox();
+        daText.scrollFactor.set();
+        scrollFactor.set();
 
         if (auto) display();
     }
