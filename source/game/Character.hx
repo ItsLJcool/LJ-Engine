@@ -84,14 +84,13 @@ class Character extends flixel.FlxSprite {
 			trace('"$char" was not found. Loading "unknown" instead.');
 		}
 
-		script = new HScript(scriptPath);
+		script = new HScript(scriptPath, this);
 		if (script.scriptFailed) {
 			script.destroy();
-			script = new HScript(Paths.script('characters/unknown/Character'));
+			script = new HScript(Paths.script('characters/unknown/Character'), this);
 			curCharacter = "unknown";
 			trace('"$char" failed to load. Loading "unknown" instead.');
 		}
-		script.parent = this;
         
         script.set("curCharacter", curCharacter);
 		script.set("character", this);

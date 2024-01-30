@@ -2,7 +2,7 @@ package game;
 
 import backend.Settings;
 import flixel.util.FlxColor;
-import game.Note.NoteShader;
+import game.NoteShaders.NoteShader;
 import flixel.input.keyboard.FlxKey;
 
 class Receptor extends FlxSprite {
@@ -17,7 +17,9 @@ class Receptor extends FlxSprite {
     public var noteShader:NoteShader;
     public var strumColor:FlxColor;
 
-    public var scrollDirection:Float = 0;
+    public var scrollDirection(default, set):Float = 0;
+    public var cosMult:Float = 1;
+    public var sinMult:Float = 0;
 
     public function new(x:Float, y:Float, direction:Int) {
         super(x, y);
@@ -37,7 +39,6 @@ class Receptor extends FlxSprite {
             strumColor,
             false
         );
-        noteShader.frameY.value = noteShader.yClip.value = [0];
 
         keybinds = keybindList[direction];
     }
@@ -66,5 +67,13 @@ class Receptor extends FlxSprite {
             y = ogY;
         } else
             super.draw();
+    }
+
+    function set_scrollDirection(direction:Float) {
+        var radians = direction * Math.PI / 180;
+        sinMult = Math.sin(-radians);
+        cosMult = Math.cos(radians);
+
+        return scrollDirection = direction;
     }
 }

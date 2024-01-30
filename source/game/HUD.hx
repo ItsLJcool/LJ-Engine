@@ -14,7 +14,7 @@ class HUD extends FlxGroup {
     public var cpuStrums:Array<Receptor> = [];
 
 	public var notes:FlxTypedGroup<Note>;
-	public var queuedNotes:Array<Note> = [];
+	public var queuedNotes:Array<QueuedNote> = [];
 
     /**
      * These objects will invert their y position when downscroll is on.
@@ -67,8 +67,10 @@ class HUD extends FlxGroup {
     override public function update(elapsed:Float) {
         super.update(elapsed);
 
-		while (queuedNotes[0] != null && queuedNotes[0].time - Conductor.songPosition < 3000)
-			notes.add(queuedNotes.shift());
+		while (queuedNotes[0] != null && queuedNotes[0].time - Conductor.songPosition < 3000) {
+            var noteData = queuedNotes.shift();
+			notes.add(new Note(noteData.time, noteData.direction, noteData.mustPress, noteData.stepLength, noteData.length));
+        }
 
 		notes.forEach(updateNote);
 
@@ -82,7 +84,7 @@ class HUD extends FlxGroup {
         var sinMult:Float = Math.sin(strum.scrollDirection * Math.PI / -180);
         var cosMult:Float = Math.cos(strum.scrollDirection * Math.PI / 180);
 
-        if (distance <= 0 && !note.mustPress && note.scrollType == NOTE) {
+        if (distance <= 0 && !note.mustPress/* && note.sustainLength <= 0*/) {
             notes.remove(note, true);
             note.destroy();
             strum.playAnim("glow", true);
@@ -90,29 +92,12 @@ class HUD extends FlxGroup {
             return;
         }
 
-        if (note.scrollType != NOTE) {
-            note.angle = strum.scrollDirection;
-
-            if (note.canBeHit && strum.holding && note.mustPress && !note.wasHit) {
-                note.wasHit = true;
-                strum.playAnim("glow", true);
-                PlayState.current.boyfriend.playAnim(animFromDirection(note.direction), true);
-            }
-
-            if (distance < note.height * 0.5 && (note.wasHit || !note.mustPress)) {
-                if (!note.mustPress && !note.wasHit) {
-                    note.wasHit = true;
-                    strum.playAnim("glow", true);
-                    PlayState.current.dad.playAnim(animFromDirection(note.direction), true);
-                }
-
-                note.yClip = -(distance - note.height * 0.5) / note.scale.y;
-
-                if (distance < note.height * -0.5) {
-                    notes.remove(note, true);
-                    note.destroy();
-                    return;
-                }
+        if (note.sustainLength > 0 && note.wasHit && strum.holding) {
+            distance = 0;
+            note.setSustainLength(note.sustainLength - FlxG.elapsed * 1000, PlayState.SONG.speed);
+            if (note.sustainLength <= 0) {
+                notes.remove(note, true);
+                note.destroy();
             }
         }
 
@@ -163,7 +148,8 @@ class HUD extends FlxGroup {
 
             note.wasHit = true;
             PlayState.current.boyfriend.playAnim(animFromDirection(note.direction), true);
-            if (note.scrollType == NOTE) {
+            note.alpha = 0;
+            if (note.sustainLength <= 0) {
                 notes.remove(note, true);
                 note.destroy();
                 PlayState.current.TEMP_hits++;

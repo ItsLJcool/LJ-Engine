@@ -155,26 +155,18 @@ class PlayState extends backend.MusicBeat.MusicBeatState {
 			}
 
 			for (noteData in section.sectionNotes) {
-				var mustPress:Bool = ((noteData[1] % 8 >= 4) != section.mustHitSection);
+				hud.queuedNotes.push({
+					time: noteData[0],
+					direction: Std.int(noteData[1] % 4),
+					mustPress: ((noteData[1] % 8 >= 4) != section.mustHitSection),
+					length: noteData[2],
 
-				var note = new Note(noteData[0], Std.int(noteData[1] % 4), mustPress, curStepCrochet, NOTE);
-				hud.queuedNotes.push(note);
-
-				var sustainCount = Math.floor(noteData[2] / curStepCrochet);
-				for (sustainIndex in 0...sustainCount) {
-					var note = new Note(
-						noteData[0] + (curStepCrochet * sustainIndex) + curStepCrochet,
-						Std.int(noteData[1] % 4),
-						mustPress,
-						curStepCrochet,
-						(sustainIndex == sustainCount - 1) ? TAIL : HOLD
-					);
-					hud.queuedNotes.push(note);
-				}
+					stepLength: curStepCrochet
+				});
 			}
 		}
 
-		hud.queuedNotes.sort((note1:Note, note2:Note) -> {
+		hud.queuedNotes.sort((note1:QueuedNote, note2:QueuedNote) -> {
 			if (note1.time < note2.time)
 				return -1;
 	
