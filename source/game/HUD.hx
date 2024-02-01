@@ -94,6 +94,7 @@ class HUD extends FlxGroup {
 
         if (note.sustainLength > 0 && note.wasHit && strum.holding) {
             distance = 0;
+            note.time = Conductor.songPosition;
             note.setSustainLength(note.sustainLength - FlxG.elapsed * 1000, PlayState.SONG.speed);
             if (note.sustainLength <= 0) {
                 notes.remove(note, true);
@@ -148,7 +149,6 @@ class HUD extends FlxGroup {
 
             note.wasHit = true;
             PlayState.current.boyfriend.playAnim(animFromDirection(note.direction), true);
-            note.alpha = 0;
             if (note.sustainLength <= 0) {
                 notes.remove(note, true);
                 note.destroy();

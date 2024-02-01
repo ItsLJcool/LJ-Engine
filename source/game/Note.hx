@@ -39,9 +39,8 @@ class Note extends FlxSprite {
 	public var noteColor:FlxColor;
 
 	// Sustain stuff.
-	public var hold:FlxSprite;
+	public var hold:Sustain;
 	public var tail:FlxSprite;
-	public var holdShader:HoldShader;
 	public var sustainLength:Float = 0;
 
 	public function new(time:Float, direction:Int, mustPress:Bool, stepLength:Float, ?sustainLength:Float = 0) {
@@ -69,26 +68,11 @@ class Note extends FlxSprite {
 
 	public function setSustainLength(newLength:Float, speed:Float) {
 		sustainLength = newLength;
-		var sustainTile:Float = newLength / stepLength;
 
-		if (hold == null && newLength > 0) {
-			var directionName = ["left", "down", "up", "right"][direction];
+		if (hold == null && newLength > 0)
+			hold = new Sustain(["left", "down", "up", "right"][direction], noteShader);
 
-			hold = new FlxSprite(x, y);
-			hold.frames = Paths.getSparrowAtlas("gameUI/coloredNotes");
-			hold.animation.addByPrefix("hold", '$directionName hold', 24, true);
-			hold.animation.play("hold");
-			hold.shader = holdShader = new HoldShader(noteColor, true);
-			hold.scale.scale(0.7);
-			hold.updateHitbox();
-			hold.origin.y = 0;
-			hold.offset.x = hold.frameWidth * 0.5;
-
-			hold.alpha = 0.6;
-		}
-
-		hold.scale.y = scale.y * sustainTile * stepLength * 0.01 * 1.5 * speed;
-		holdShader.tileMult.value = [sustainTile];
+		hold.sustainMult = (45 * (newLength * speed * 0.015)) / hold.frameHeight;
 	}
 
 	override public function draw() {
@@ -98,24 +82,13 @@ class Note extends FlxSprite {
 		noteShader.noteColor.value[1] = noteColor.greenFloat;
 		noteShader.noteColor.value[2] = noteColor.blueFloat;
 
-		super.draw();
 		if (hold != null) {
-			holdShader.frameTop.value = [(hold.frame.frame.top + 1.5) / hold.frames.parent.height];
-			holdShader.frameBottom.value = [(hold.frame.frame.bottom - 1.5) / hold.frames.parent.height];
 			hold.setPosition(x + width * 0.5, y + height * 0.5);
+			hold.alpha = alpha * 0.6;
 			hold.draw();
 		}
-		// if (Settings.downscroll) {
-		// 	var ogY = y;
-		// 	var scaleYMult = (scrollType != NOTE) ? -1 : 1;
-
-		// 	y = FlxG.height - (frameHeight * scale.y) - y;
-		// 	scale.y *= scaleYMult;
-		// 	super.draw();
-		// 	scale.y *= scaleYMult;
-		// 	y = ogY;
-		// }
-		// else super.draw();
+		if (!wasHit)
+			super.draw();
 	}
 
 	override public function destroy() {
