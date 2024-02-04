@@ -1,5 +1,6 @@
 package game;
 
+import flixel.math.FlxRect;
 import backend.Settings;
 import backend.Conductor;
 import game.NoteShaders;
@@ -17,6 +18,10 @@ typedef QueuedNote = {
 
 class Note extends FlxSprite {
 	public static var swagWidth:Float = 154 * 0.7;
+
+	// Animation Stuff.
+	public var characters:Array<Character>;
+	public var animToPlay:String = "singLEFT";
 
 	// Calculation Stuff.
 	public var maxEarlyDiff:Float = 125;
@@ -39,21 +44,25 @@ class Note extends FlxSprite {
 	public var noteColor:FlxColor;
 
 	// Sustain stuff.
+	public var holding:Bool = false;
+	public var untilTick:Float;
 	public var hold:Sustain;
 	public var tail:FlxSprite;
 	public var sustainLength:Float = 0;
 
-	public function new(time:Float, direction:Int, mustPress:Bool, stepLength:Float, ?sustainLength:Float = 0) {
+	public function new(time:Float, direction:Int, mustPress:Bool, char:Character, stepLength:Float, ?sustainLength:Float = 0) {
 		super(-999, -999);
 
 		this.time = time;
 		this.direction = direction;
 		this.mustPress = mustPress;
-		this.stepLength = stepLength;
+		this.characters = [char];
+		this.stepLength = untilTick = stepLength;
 
 		scale.scale(0.7);
 
-		var directionName = ["left", "down", "up", "right"][direction]; // temp
+		final directionName = ["left", "down", "up", "right"][direction]; // temp
+		animToPlay = "sing" + directionName.toUpperCase();
 		frames = Paths.getSparrowAtlas("gameUI/coloredNotes");
 		animation.addByPrefix("scroll", '$directionName note', 24, true);
 		animation.play("scroll");
@@ -69,10 +78,25 @@ class Note extends FlxSprite {
 	public function setSustainLength(newLength:Float, speed:Float) {
 		sustainLength = newLength;
 
-		if (hold == null && newLength > 0)
-			hold = new Sustain(["left", "down", "up", "right"][direction], noteShader);
+		if (hold == null && newLength > 0) {
+			final directionName = ["left", "down", "up", "right"][direction];
 
-		hold.sustainMult = (45 * (newLength * speed * 0.015)) / hold.frameHeight;
+			hold = new Sustain(directionName, noteShader);
+
+			tail = new FlxSprite(-999, -999);
+			tail.frames = hold.frames;
+			tail.animation.addByPrefix("tail", '$directionName tail', 24, true);
+			tail.animation.play("tail");
+			tail.shader = noteShader;
+			tail.scale.scale(0.7);
+			tail.updateHitbox();
+			tail.clipRect = new FlxRect(0, 0, tail.frameWidth, tail.frameHeight);
+			tail.offset.x = tail.frameWidth * 0.5;
+		}
+
+		hold.sustainMult = ((45 * (newLength * speed * 0.015)) - tail.frameHeight) / hold.frameHeight;
+		tail.clipRect.y = -Math.min(hold.sustainMult, 0.0) * tail.frameHeight;
+		tail.clipRect = tail.clipRect;
 	}
 
 	override public function draw() {
@@ -86,6 +110,10 @@ class Note extends FlxSprite {
 			hold.setPosition(x + width * 0.5, y + height * 0.5);
 			hold.alpha = alpha * 0.6;
 			hold.draw();
+
+			tail.setPosition(hold.x, hold.y + hold.height);
+			tail.alpha = hold.alpha;
+			tail.draw();
 		}
 		if (!wasHit)
 			super.draw();
@@ -94,6 +122,7 @@ class Note extends FlxSprite {
 	override public function destroy() {
 		if (hold != null) {
 			hold.destroy();
+			tail.destroy();
 		}
 		super.destroy();
 	}
@@ -106,7 +135,7 @@ class Note extends FlxSprite {
 
 	var _tooLate:Bool = false;
 	function get_tooLate():Bool {
-		_tooLate = _tooLate || (time + missDiff < Conductor.songPosition && !wasHit && !canBeHit);
+		_tooLate = _tooLate || (time + missDiff < Conductor.songPosition && !holding && !canBeHit);
 		return _tooLate;
 	}
 }

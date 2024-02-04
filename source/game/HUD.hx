@@ -31,12 +31,12 @@ class HUD extends FlxGroup {
         strums = new FlxTypedGroup<Receptor>();
         add(strums);
         for (i in 0...4) {
-            var cpuStrum = new Receptor(100 + Note.swagWidth * i, 50, i);
+            final cpuStrum = new Receptor(100 + Note.swagWidth * i, 50, i);
             cpuStrum.isCpu = true;
             cpuStrums.push(cpuStrum);
             strums.insert(i , cpuStrum);
 
-            var plrStrum = new Receptor(740 + Note.swagWidth * i, 50, i);
+            final plrStrum = new Receptor(740 + Note.swagWidth * i, 50, i);
             plrStrums.push(plrStrum);
             strums.insert(i + 4, plrStrum);
         }
@@ -68,8 +68,9 @@ class HUD extends FlxGroup {
         super.update(elapsed);
 
 		while (queuedNotes[0] != null && queuedNotes[0].time - Conductor.songPosition < 3000) {
-            var noteData = queuedNotes.shift();
-			notes.add(new Note(noteData.time, noteData.direction, noteData.mustPress, noteData.stepLength, noteData.length));
+            final noteData = queuedNotes.shift();
+            final char = (noteData.mustPress) ? PlayState.current.boyfriend : PlayState.current.dad;
+			notes.add(new Note(noteData.time, noteData.direction, noteData.mustPress, char, noteData.stepLength, noteData.length));
         }
 
 		notes.forEach(updateNote);
@@ -78,32 +79,35 @@ class HUD extends FlxGroup {
     }
 
     public function updateNote(note:Note) {
-        var strum = (note.mustPress) ? plrStrums[note.direction] : cpuStrums[note.direction];
+        final strum = (note.mustPress) ? plrStrums[note.direction] : cpuStrums[note.direction];
 		
 		var distance:Float = PlayState.SONG.speed * -0.45 * (Conductor.songPosition - note.time);
-        var sinMult:Float = Math.sin(strum.scrollDirection * Math.PI / -180);
-        var cosMult:Float = Math.cos(strum.scrollDirection * Math.PI / 180);
 
-        if (distance <= 0 && !note.mustPress/* && note.sustainLength <= 0*/) {
-            notes.remove(note, true);
-            note.destroy();
-            strum.playAnim("glow", true);
-            PlayState.current.dad.playAnim(animFromDirection(note.direction), true);
+        if (distance <= 0 && !note.mustPress && !note.wasHit) {
+            tryDeleteNote(note, strum);
             return;
         }
 
-        if (note.sustainLength > 0 && note.wasHit && strum.holding) {
+        note.holding = note.wasHit && (strum.holding || !note.mustPress);
+        if (note.sustainLength > 0 && note.holding) {
             distance = 0;
             note.time = Conductor.songPosition;
             note.setSustainLength(note.sustainLength - FlxG.elapsed * 1000, PlayState.SONG.speed);
+            note.untilTick -= FlxG.elapsed * 1000;
+            if (note.untilTick <= 0) {
+                note.untilTick = note.stepLength;
+                for (char in note.characters)
+                    char.playAnim(note.animToPlay, true);
+                strum.playAnim("glow", true);
+            }
             if (note.sustainLength <= 0) {
                 notes.remove(note, true);
                 note.destroy();
             }
         }
 
-		note.x = (strum.x + strum.width / 2) + distance * sinMult - note.width / 2;
-        note.y = (strum.y + strum.height / 2) + distance * cosMult - note.height / 2;
+		note.x = (strum.x + strum.width / 2) + distance * strum.sinMult - note.width / 2;
+        note.y = (strum.y + strum.height / 2) + distance * strum.cosMult - note.height / 2;
 
         if (note.tooLate) {
             notes.remove(note, true);
@@ -114,7 +118,7 @@ class HUD extends FlxGroup {
 
     override public function draw() {
         if (backend.Settings.downscroll) {
-            var ogYArray:Array<Float> = [];
+            final ogYArray:Array<Float> = [];
             for (object in hudScrollObjects) {
                 ogYArray.push(object.y);
                 object.y = FlxG.height - object.height - object.y;
@@ -142,30 +146,31 @@ class HUD extends FlxGroup {
 
         if (strumIndex < 0 || plrStrums[strumIndex].holding) return;
 
-        var animToPlay:String = "ghost";
-
         for (note in notes.members) {
             if (!note.mustPress || !note.canBeHit || note.direction != strumIndex || note.wasHit) continue;
-
-            note.wasHit = true;
-            PlayState.current.boyfriend.playAnim(animFromDirection(note.direction), true);
-            if (note.sustainLength <= 0) {
-                notes.remove(note, true);
-                note.destroy();
-                PlayState.current.TEMP_hits++;
-            }
-
-            animToPlay = "glow";
-
+            tryDeleteNote(note, plrStrums[strumIndex], 1);
+            plrStrums[strumIndex].holding = true;
             break;
         }
 
-        plrStrums[strumIndex].holding = true;
-        plrStrums[strumIndex].playAnim(animToPlay, true);
+        if (!plrStrums[strumIndex].holding) {
+            plrStrums[strumIndex].holding = true;
+            plrStrums[strumIndex].playAnim("ghost", true);
+        }
     }
 
-    function animFromDirection(direction:Int, ?prefix:String = "") //The line without this was getting too long.
-        return ["singLEFT", "singDOWN", "singUP", "singRIGHT"][direction] + prefix;
+    function tryDeleteNote(note:Note, strum:Receptor, hitInc:Int = 0) {
+        note.wasHit = true;
+        note.holding = true;
+        strum.playAnim("glow", true);
+        for (char in note.characters)
+            char.playAnim(note.animToPlay, true);
+        if (note.sustainLength <= 0) {
+            notes.remove(note, true);
+            note.destroy();
+            PlayState.current.TEMP_hits += hitInc;
+        }
+    }
 
     public function keyUp(event:KeyboardEvent) {
         if (PlayState.current.subState != null) return;

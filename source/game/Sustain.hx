@@ -24,7 +24,6 @@ class Sustain extends flixel.FlxStrip {
         animation.addByPrefix("hold", '$directionName hold', 24, true);
         animation.play("hold");
         shader = parentShader;
-        scale.scale(0.7);
         updateHitbox();
 
         scale = new FlxCallbackPoint(scaleSet);
